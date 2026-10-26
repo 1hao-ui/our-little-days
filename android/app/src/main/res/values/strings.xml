@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">我们的小日子</string>
+    <string name="loading_title">我们的小日子</string>
+    <string name="loading_subtitle">正在轻轻打开…</string>
+    <string name="error_title">页面没有打开</string>
+    <string name="error_message">检查一下网络，再试一次吧。</string>
+    <string name="retry">再试一次</string>
+</resources>

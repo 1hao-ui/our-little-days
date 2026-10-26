@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="粉色小猪图标">
+
+  <!-- 耳朵 -->
+  <g stroke="#D9827F" stroke-width="9" stroke-linejoin="round">
+    <path d="M306 407c-53-88-57-165-4-180 55-15 115 40 154 119-48 31-103 51-150 61Z" fill="#EF9E98"/>
+    <path d="M718 407c53-88 57-165 4-180-55-15-115 40-154 119 48 31 103 51 150 61Z" fill="#EF9E98"/>
+  </g>
+  <path d="M314 351c-29-58-31-105-2-111 32-7 67 27 91 79-31 16-61 27-89 32Z" fill="#FAD1CD"/>
+  <path d="M710 351c29-58 31-105 2-111-32-7-67 27-91 79 31 16 61 27 89 32Z" fill="#FAD1CD"/>
+
+  <!-- 脸 -->
+  <ellipse cx="512" cy="552" rx="300" ry="276" fill="#F5ACA6" stroke="#D9827F" stroke-width="9"/>
+
+  <!-- 腮红 -->
+  <ellipse cx="316" cy="614" rx="60" ry="33" fill="#E9807E" opacity=".55"/>
+  <ellipse cx="708" cy="614" rx="60" ry="33" fill="#E9807E" opacity=".55"/>
+
+  <!-- 眼睛 -->
+  <ellipse cx="408" cy="520" rx="21" ry="28" fill="#5F4742"/>
+  <ellipse cx="616" cy="520" rx="21" ry="28" fill="#5F4742"/>
+  <circle cx="401" cy="510" r="6.5" fill="#FFFDFC" opacity=".9"/>
+  <circle cx="609" cy="510" r="6.5" fill="#FFFDFC" opacity=".9"/>
+
+  <!-- 鼻子 -->
+  <ellipse cx="512" cy="636" rx="136" ry="90" fill="#EF9A94"/>
+  <ellipse cx="512" cy="628" rx="112" ry="64" fill="#F4B7B2" opacity=".28"/>
+  <ellipse cx="472" cy="632" rx="15" ry="23" fill="#8E5D5D"/>
+  <ellipse cx="552" cy="632" rx="15" ry="23" fill="#8E5D5D"/>
+
+  <!-- 嘴巴 -->
+  <path d="M487 700c14 16 36 16 50 0" fill="none" stroke="#8E5D5D" stroke-width="8" stroke-linecap="round"/>
+</svg>

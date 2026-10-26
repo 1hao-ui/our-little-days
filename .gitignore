@@ -5,3 +5,16 @@ node_modules/
 shots/
 *.log
 .DS_Store
+
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/build/
+android/app/build/
+android/captures/
+*.iml
+*.apk
+*.jks
+*.keystore
+dist/

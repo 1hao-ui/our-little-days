@@ -35,6 +35,7 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 - 明细列表：按日期倒序；点击任意一条回到打卡区修改
 - CSV 导出：UTF-8 带 BOM，Excel 打开中文不乱码
 - 自定义粉色小猪 PWA 图标，iPhone 和 Android 都可以添加到主屏幕
+- 附带一个轻量 Android WebView 包装工程，可自行构建 APK
 - 全站无账号、无第三方统计、无外部脚本；数据只在 D1
 - 移动端优先，桌面端居中，内容宽度约 420px
 
@@ -50,7 +51,8 @@ our-little-days/
 │  ├─ index.html          # 页面、样式、交互、图表、日历全部在这里
 │  ├─ _worker.js          # Pages Worker：路径门禁 + API + D1 + CSV + PWA
 │  └─ icons/              # 小猪主屏幕图标 32/180/192/512
-├─ assets/pig-icon.svg    # 小猪图标源文件
+├─ assets/                # 小猪图标 SVG 源文件
+├─ android/               # Android WebView 包装工程
 ├─ schema.sql             # D1 表结构
 ├─ wrangler.jsonc         # Pages 项目、D1 绑定、兼容日期
 ├─ scripts/wrangler.mjs   # 包一层 Wrangler，顺带处理 Windows 临时目录
@@ -346,3 +348,44 @@ CSV 列固定为：
 ### 免费额度够不够
 
 两个人每天一条记录，体量非常小，Pages 和 D1 的免费额度足够长期使用。项目没有 R2、KV、Queues、AI 等其它付费依赖。
+
+---
+
+## 10. Android APK
+
+`android/` 里是一个不依赖第三方库的 WebView 包装工程：
+
+- 包名 `com.onehao.littledays`
+- 最低 Android 8.0（API 26），targetSdk 34
+- 奶油色启动页 + 小猪图标 + 加载失败重试
+- 页面内 CSV 导出会交给系统下载管理器
+- 外部链接会交给系统浏览器
+- 返回键会退出 App，不会在页面里乱跳
+- 页面链接通过 `BuildConfig.APP_URL` 编译进 APK，不会出现在源码里
+
+### 构建
+
+要求：JDK 21、Android SDK（platform 35、build-tools 34）。先确保 `android/local.properties` 里的 `sdk.dir` 指向本机 Android SDK。
+
+```powershell
+cd android
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
+$env:ANDROID_HOME = "$env:LOCALAPPDATA\Android\Sdk"
+.\gradlew.bat assembleDebug "-PAPP_URL=https://our-little-days-4u7.pages.dev/<APP_SECRET>/"
+```
+
+生成的 APK 在：
+
+```text
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+把 APK 复制成 `public/download/our-little-days.apk` 后重新部署，就可以通过下面的地址下载：
+
+```text
+https://our-little-days-4u7.pages.dev/<APP_SECRET>/download/our-little-days.apk
+```
+
+`dist/`、`public/download/*.apk` 和所有 `*.apk` 都被忽略，不会提交到仓库。构建时请把 `<APP_SECRET>` 换成本地或线上对应的密钥；APK 一旦分发，拿到 APK 的人就拥有这个入口，不要公开分享。
+
+更换 `APP_SECRET` 后，旧 APK 会失效，需要重新构建并重新安装。

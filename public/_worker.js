@@ -23,6 +23,7 @@ const MOOD_LABELS = {
 };
 const APP_TIME_ZONE = 'Asia/Shanghai';
 const ICON_FILES = new Set(['pig-32.png', 'pig-180.png', 'pig-192.png', 'pig-512.png']);
+const DOWNLOAD_FILES = new Set(['our-little-days.apk']);
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -340,6 +341,29 @@ async function serveIcon(env, request, filename) {
   return new Response(response.body, { status: response.status, headers });
 }
 
+async function serveDownload(env, request, filename) {
+  if (!env.ASSETS) {
+    console.error('ASSETS binding is missing.');
+    return new Response('安装包暂时没有准备好。', { status: 500 });
+  }
+  const assetUrl = new URL(request.url);
+  assetUrl.pathname = `/download/${filename}`;
+  assetUrl.search = '';
+  const response = await env.ASSETS.fetch(
+    new Request(assetUrl.toString(), {
+      method: request.method,
+      headers: request.headers,
+    }),
+  );
+  if (!response.ok) return notFound();
+  const headers = new Headers(response.headers);
+  headers.delete('access-control-allow-origin');
+  headers.set('content-type', 'application/vnd.android.package-archive');
+  headers.set('content-disposition', 'attachment; filename="our-little-days.apk"');
+  headers.set('cache-control', 'no-store');
+  return new Response(response.body, { status: response.status, headers });
+}
+
 function injectPwaTags(html, token) {
   const base = basePath(token);
   const tags = [
@@ -446,6 +470,15 @@ export default {
         return withSecurityHeaders(await serveIcon(env, request, parts[2]));
       } catch (error) {
         console.error('Failed to serve icon:', error);
+        return withSecurityHeaders(notFound());
+      }
+    }
+
+    if (parts[1] === 'download' && parts.length === 3 && DOWNLOAD_FILES.has(parts[2])) {
+      try {
+        return withSecurityHeaders(await serveDownload(env, request, parts[2]));
+      } catch (error) {
+        console.error('Failed to serve download:', error);
         return withSecurityHeaders(notFound());
       }
     }
