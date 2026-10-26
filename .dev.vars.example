@@ -1,0 +1,2 @@
+# 本地开发用。真正的网址路径密钥，请换成自己生成的一长串随机字符。
+APP_SECRET=replace-with-a-long-random-secret

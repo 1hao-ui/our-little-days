@@ -1,0 +1,2411 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFF9F5">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23FFF1EF'/%3E%3Cpath d='M16 25S7 19.6 7 13.6C7 10.5 9.2 8.5 12 8.5c1.8 0 3.2 1 4 2.5.8-1.5 2.2-2.5 4-2.5 2.8 0 5 2 5 5.1C25 19.6 16 25 16 25Z' fill='%23F19BA1'/%3E%3C/svg%3E">
+  <title>我们的小日子</title>
+  <style>
+    :root {
+      --bg: #FFF9F5;
+      --card: #FFFFFF;
+      --surface: #FBF7F4;
+      --surface-warm: #FFF7F3;
+      --pink: #F7A8A8;
+      --pink-strong: #F19BA1;
+      --pink-deep: #D9878A;
+      --pink-soft: #FDE7E9;
+      --pink-wash: #FFF1EF;
+      --apricot: #F6D8C4;
+      --line: #F1E4DD;
+      --text: #5A4F4C;
+      --muted: #9B8A83;
+      --faint: #BCADA7;
+      --radius-card: 20px;
+      --radius-pill: 999px;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      background: var(--bg);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      border: 0;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      background: var(--pink-soft);
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 2px solid #D88388;
+      outline-offset: 3px;
+    }
+
+    .page {
+      width: min(100%, 456px);
+      margin: 0 auto;
+      padding: 30px 18px calc(42px + env(safe-area-inset-bottom));
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 2px 4px 22px;
+      animation: page-fade .3s var(--ease) both;
+    }
+
+    .hero-copy {
+      min-width: 0;
+      padding-top: 3px;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--pink-deep);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .19em;
+      line-height: 1.5;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 7.2vw, 30px);
+      font-weight: 750;
+      letter-spacing: -.035em;
+      line-height: 1.25;
+    }
+
+    .hero-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .hero-pig {
+      flex: none;
+      width: 76px;
+      height: auto;
+      margin: -2px 1px 0 0;
+      transform: rotate(4deg);
+    }
+
+    .card {
+      position: relative;
+      margin: 0 0 16px;
+      padding: 20px;
+      border-radius: var(--radius-card);
+      background: var(--card);
+      animation: page-fade .3s var(--ease) both;
+    }
+
+    .card:nth-of-type(2) {
+      animation-delay: .03s;
+    }
+
+    .card:nth-of-type(3) {
+      animation-delay: .06s;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .section-head h2,
+    .export-card h2 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 720;
+      letter-spacing: -.015em;
+      line-height: 1.4;
+    }
+
+    .soft-badge,
+    .count-pill {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      min-height: 24px;
+      margin-top: 1px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--pink-wash);
+      color: #A66E70;
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: .04em;
+    }
+
+    .date-nav {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) 36px;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--surface);
+      color: #927A73;
+      transition: background .2s var(--ease), transform .2s var(--ease), opacity .2s;
+    }
+
+    .icon-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .icon-button:not(:disabled):hover {
+      background: var(--pink-wash);
+      color: var(--pink-deep);
+    }
+
+    .icon-button:not(:disabled):active {
+      transform: scale(.93);
+    }
+
+    .icon-button:disabled {
+      opacity: .32;
+      cursor: default;
+    }
+
+    .date-pick {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 12px;
+      border-radius: 14px;
+      background: var(--surface);
+      transition: background .2s var(--ease), box-shadow .2s var(--ease);
+    }
+
+    .date-pick:focus-within {
+      background: var(--pink-wash);
+      box-shadow: inset 0 0 0 1.5px #F3C3C2;
+    }
+
+    .date-copy {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.2;
+      pointer-events: none;
+    }
+
+    .date-main {
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .date-sub {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9.5px;
+    }
+
+    .date-pick > svg {
+      flex: none;
+      width: 16px;
+      height: 16px;
+      margin-left: auto;
+      color: #C89A93;
+      pointer-events: none;
+    }
+
+    .date-picker {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: inherit;
+      background: transparent;
+      color: transparent;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .date-picker::-webkit-calendar-picker-indicator {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .field {
+      min-width: 0;
+      margin: 18px 0 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .field-label,
+    .field-row label {
+      padding: 0;
+      color: #62534F;
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .005em;
+    }
+
+    .field-hint {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 400;
+    }
+
+    .weight-box {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      margin-top: 8px;
+      padding: 0 16px;
+      border: 1.5px solid transparent;
+      border-radius: 18px;
+      background: var(--surface);
+      transition: border-color .2s var(--ease), background .2s var(--ease);
+    }
+
+    .weight-box:focus-within {
+      border-color: #F1BABA;
+      background: #FFFAF7;
+    }
+
+    .weight-input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 32px;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.025em;
+      line-height: 1;
+      caret-color: var(--pink-deep);
+      appearance: textfield;
+    }
+
+    .weight-input::-webkit-outer-spin-button,
+    .weight-input::-webkit-inner-spin-button {
+      margin: 0;
+      appearance: none;
+    }
+
+    .weight-input::placeholder {
+      color: #DCCBC4;
+      font-weight: 500;
+    }
+
+    .weight-unit {
+      flex: none;
+      padding-left: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .period-options {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 9px;
+    }
+
+    .period-btn {
+      min-height: 43px;
+      padding: 0 3px;
+      border: 1px solid #F0E5DF;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: #83716B;
+      font-size: 12px;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .period-btn:hover {
+      border-color: #F2CFCB;
+      background: #FFF5F3;
+    }
+
+    .period-btn:active {
+      transform: scale(.97);
+    }
+
+    .period-btn[aria-pressed="true"] {
+      border-color: var(--pink);
+      background: var(--pink);
+      color: #523536;
+      font-weight: 700;
+    }
+
+    .symptom-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .symptom-btn {
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid #F0E5DF;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: #8A7872;
+      font-size: 12px;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .symptom-btn:hover {
+      border-color: #F2CFCB;
+      background: #FFF5F3;
+    }
+
+    .symptom-btn:active {
+      transform: scale(.96);
+    }
+
+    .symptom-btn[aria-pressed="true"] {
+      border-color: #F8CBCD;
+      background: var(--pink-soft);
+      color: #875659;
+      font-weight: 650;
+    }
+
+    .mood-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .mood-btn {
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 8px;
+      border: 1px solid #F0E5DF;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: #88766F;
+      font-size: 12px;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .mood-btn svg {
+      width: 25px;
+      height: 25px;
+      flex: none;
+      color: #B59A92;
+      transition: color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .mood-btn:hover {
+      border-color: #F2CFCB;
+      background: #FFF5F3;
+    }
+
+    .mood-btn:active {
+      transform: scale(.97);
+    }
+
+    .mood-btn[aria-pressed="true"] {
+      border-color: #F7C3C6;
+      background: var(--pink-soft);
+      color: #865256;
+      font-weight: 650;
+    }
+
+    .mood-btn[aria-pressed="true"] svg {
+      color: #C9797F;
+      transform: scale(1.04);
+    }
+
+    .save-zone {
+      position: relative;
+      margin-top: 22px;
+    }
+
+    .save-button {
+      display: flex;
+      width: 100%;
+      min-height: 57px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: var(--radius-pill);
+      background: #F3A0A4;
+      color: #4E2E30;
+      font-size: 15.5px;
+      font-weight: 750;
+      letter-spacing: .02em;
+      transition: transform .2s var(--ease), filter .2s var(--ease), opacity .2s;
+      touch-action: manipulation;
+    }
+
+    .save-button svg {
+      width: 18px;
+      height: 18px;
+      color: #714144;
+    }
+
+    .save-button:hover {
+      filter: brightness(1.015) saturate(1.035);
+    }
+
+    .save-button:active {
+      transform: scale(.97);
+    }
+
+    .save-button:disabled {
+      cursor: default;
+      opacity: .58;
+      transform: none;
+    }
+
+    .save-button.is-busy svg {
+      animation: soft-pulse 1s ease-in-out infinite;
+    }
+
+    .save-burst {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: 34px;
+      left: 50%;
+      width: 28px;
+      height: 28px;
+      color: #EC8C93;
+      opacity: 0;
+      will-change: transform, opacity;
+      animation: heart-rise 1.05s var(--ease) forwards;
+    }
+
+    .save-feedback {
+      display: flex;
+      max-height: 0;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 0;
+      padding: 0 13px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--pink-wash);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: max-height .25s var(--ease), margin .25s var(--ease),
+        padding .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .save-feedback.is-visible {
+      max-height: 180px;
+      margin-top: 10px;
+      padding: 11px 13px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feedback-heart {
+      flex: none;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      color: #DF9297;
+    }
+
+    .feedback-label {
+      display: block;
+      color: #B27C7D;
+      font-size: 9.5px;
+      letter-spacing: .05em;
+      line-height: 1.5;
+    }
+
+    .feedback-quote {
+      margin: 2px 0 0;
+      color: #725C58;
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .chart-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 12px;
+      margin-top: 13px;
+    }
+
+    .range-switch {
+      display: inline-flex;
+      gap: 2px;
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+    }
+
+    .range-btn {
+      min-height: 29px;
+      padding: 0 14px;
+      border-radius: var(--radius-pill);
+      color: #A08D86;
+      font-size: 11px;
+      transition: background .2s var(--ease), color .2s var(--ease);
+    }
+
+    .range-btn[aria-pressed="true"] {
+      background: var(--pink-soft);
+      color: #8B575A;
+      font-weight: 650;
+    }
+
+    .chart-target-legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #A28B83;
+      font-size: 9.5px;
+      white-space: nowrap;
+    }
+
+    .chart-target-legend::before {
+      width: 18px;
+      border-top: 1.5px dashed #C9B5AD;
+      content: "";
+    }
+
+    .latest-pill {
+      max-width: 128px;
+      overflow: hidden;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--surface-warm);
+      color: #8C7470;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chart-box {
+      position: relative;
+      height: 178px;
+      margin-top: 9px;
+    }
+
+    .weight-chart {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .chart-grid {
+      stroke: #F5EAE5;
+      stroke-width: 1;
+    }
+
+    .chart-axis-text {
+      fill: #B6A39B;
+      font-family: inherit;
+      font-size: 9px;
+    }
+
+    .chart-area {
+      fill: #FDEBEC;
+      opacity: .62;
+    }
+
+    .chart-line {
+      fill: none;
+      stroke: var(--pink-strong);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .chart-dot {
+      fill: var(--pink-strong);
+      stroke: #FFFDFC;
+      stroke-width: 2;
+    }
+
+    .chart-target {
+      stroke: #C9B5AD;
+      stroke-width: 1.2;
+      stroke-dasharray: 4 4;
+    }
+
+    .chart-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #FFFBF8;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .chart-empty svg {
+      width: 58px;
+      height: 38px;
+      color: #E8B8B3;
+    }
+
+    .gentle-line {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11.5px;
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 13px;
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+    }
+
+    .month-btn {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 50%;
+      color: #A28E86;
+      transition: background .2s var(--ease), color .2s var(--ease), transform .2s;
+    }
+
+    .month-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .month-btn:hover:not(:disabled) {
+      background: #FFFFFF;
+      color: var(--pink-deep);
+    }
+
+    .month-btn:active:not(:disabled) {
+      transform: scale(.92);
+    }
+
+    .month-btn:disabled {
+      opacity: .3;
+      cursor: default;
+    }
+
+    .month-title {
+      color: #6C5B56;
+      font-size: 12.5px;
+      font-weight: 650;
+      letter-spacing: .03em;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      margin-top: 11px;
+      padding: 0 2px;
+    }
+
+    .weekdays span {
+      color: #B6A49D;
+      font-size: 9.5px;
+      text-align: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      row-gap: 2px;
+      margin-top: 3px;
+    }
+
+    .day-cell {
+      display: flex;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-btn {
+      position: relative;
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1.5px solid transparent;
+      border-radius: 50%;
+      background: transparent;
+      color: #80706A;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      transition: background .2s var(--ease), color .2s var(--ease),
+        transform .2s var(--ease);
+    }
+
+    .day-btn:hover:not(:disabled) {
+      background: var(--pink-wash);
+    }
+
+    .day-btn:active:not(:disabled) {
+      transform: scale(.91);
+    }
+
+    .day-btn.is-today {
+      outline: 1.5px solid #EFA2A4;
+      outline-offset: 1px;
+    }
+
+    .day-btn.flow-light {
+      background: #FDEBED;
+      color: #966165;
+    }
+
+    .day-btn.flow-mid {
+      background: #F8C6CB;
+      color: #754548;
+    }
+
+    .day-btn.flow-heavy {
+      background: #EE9AA3;
+      color: #4E2A2D;
+      font-weight: 650;
+    }
+
+    .day-btn:disabled {
+      color: #DCCFC9;
+      cursor: default;
+    }
+
+    .calendar-legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 9px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 9.5px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .legend-light {
+      background: #FDEBED;
+    }
+
+    .legend-mid {
+      background: #F8C6CB;
+    }
+
+    .legend-heavy {
+      background: #EE9AA3;
+    }
+
+    .cycle-summary {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: var(--surface-warm);
+    }
+
+    .cycle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .cycle-stat-label {
+      display: block;
+      color: #AB948D;
+      font-size: 9.5px;
+      line-height: 1.5;
+    }
+
+    .cycle-stat-value {
+      display: block;
+      margin-top: 2px;
+      color: #6A5752;
+      font-size: 14.5px;
+      font-weight: 680;
+      line-height: 1.4;
+    }
+
+    .cycle-stat-value.is-empty {
+      color: #B7A49D;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    .cycle-intervals {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .cycle-intervals-label {
+      color: #AB948D;
+      font-size: 9.5px;
+    }
+
+    .cycle-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cycle-tag {
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      color: #896F69;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cycle-empty {
+      color: #B7A49D;
+      font-size: 10px;
+    }
+
+    .records-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .record-item {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: #FFF8F4;
+      color: var(--text);
+      text-align: left;
+      transition: background .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .record-item:hover {
+      background: #FFF2EC;
+    }
+
+    .record-item:active {
+      transform: scale(.992);
+    }
+
+    .record-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .record-date-wrap {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .record-date {
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: var(--pink-soft);
+      color: #8C5A5D;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+
+    .record-weekday {
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .record-weight {
+      flex: none;
+      color: #5F4E49;
+      font-size: 15px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+    }
+
+    .record-weight-unit {
+      margin-left: 2px;
+      color: var(--muted);
+      font-size: 9.5px;
+      font-weight: 500;
+    }
+
+    .record-weight.is-empty {
+      color: #B8A6A0;
+      font-weight: 500;
+    }
+
+    .record-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10.5px;
+    }
+
+    .record-period,
+    .record-mood {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .period-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #E7D7D0;
+    }
+
+    .period-dot.light {
+      background: #F5C7CC;
+    }
+
+    .period-dot.mid {
+      background: #EEA5AC;
+    }
+
+    .period-dot.heavy {
+      background: #E1848E;
+    }
+
+    .record-symptoms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 7px;
+    }
+
+    .mini-chip {
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      color: #927D76;
+      font-size: 9.5px;
+    }
+
+    .record-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .record-message {
+      color: #8D7770;
+      font-size: 11.5px;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .record-arrow {
+      flex: none;
+      width: 14px;
+      height: 14px;
+      margin-bottom: 1px;
+      color: #C9B6AE;
+    }
+
+    .records-hint {
+      margin: 12px 0 0;
+      color: #B4A29B;
+      font-size: 10px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .records-loading,
+    .records-empty,
+    .load-error {
+      padding: 26px 12px;
+      border-radius: 16px;
+      background: #FFFBF8;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .records-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .loading-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #E8B0B0;
+      animation: soft-pulse 1s ease-in-out infinite;
+    }
+
+    .load-error p {
+      margin: 0 0 10px;
+    }
+
+    .retry-btn {
+      min-height: 34px;
+      padding: 0 15px;
+      border: 1px solid #F0D3CF;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      color: #9A6668;
+      font-size: 11px;
+    }
+
+    .export-card {
+      padding-bottom: 18px;
+      text-align: center;
+    }
+
+    .export-card h2 {
+      font-size: 18px;
+    }
+
+    .export-copy {
+      margin: 7px auto 15px;
+      max-width: 300px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.7;
+    }
+
+    .export-button {
+      display: flex;
+      width: 100%;
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid #F1D4CA;
+      border-radius: var(--radius-pill);
+      background: var(--pink-wash);
+      color: #8A5A59;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+      transition: background .2s var(--ease), transform .2s var(--ease);
+      touch-action: manipulation;
+    }
+
+    .export-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .export-button:hover {
+      background: #FFEBE8;
+    }
+
+    .export-button:active {
+      transform: scale(.98);
+    }
+
+    .export-note {
+      margin: 11px 0 0;
+      color: #B7A49D;
+      font-size: 9.5px;
+      line-height: 1.6;
+    }
+
+    .page-footer {
+      padding: 10px 0 0;
+      color: #BFAEA7;
+      font-size: 10px;
+      letter-spacing: .07em;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 50;
+      bottom: calc(22px + env(safe-area-inset-bottom));
+      left: 50%;
+      width: max-content;
+      max-width: calc(100vw - 36px);
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      background: #5F524E;
+      color: #FFF9F5;
+      font-size: 11.5px;
+      line-height: 1.5;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 10px);
+      transition: opacity .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @keyframes page-fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes heart-rise {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 8px) scale(.55) rotate(-8deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -72px) scale(1.06) rotate(8deg);
+      }
+    }
+
+    @keyframes soft-pulse {
+      0%,
+      100% {
+        opacity: .35;
+        transform: scale(.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .card {
+        padding: 18px 16px;
+      }
+
+      .hero {
+        padding-right: 2px;
+        padding-left: 2px;
+      }
+
+      .hero-pig {
+        width: 62px;
+      }
+
+      .period-btn {
+        font-size: 11.5px;
+      }
+
+      .symptom-btn {
+        padding: 0 12px;
+      }
+
+      .record-item {
+        padding: 12px;
+      }
+    }
+
+    @media (min-width: 680px) {
+      .page {
+        padding-top: 52px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">两个人的小本子</p>
+        <h1>我们的小日子</h1>
+        <p class="hero-subtitle">每天一点点，把日子轻轻记下来。</p>
+      </div>
+      <svg class="hero-pig" viewBox="0 0 80 80" role="img" aria-label="一只可爱的粉色小猪贴纸">
+        <path d="M20.5 31.5c-2.7-8.1 1.2-13 8.3-10.6l7.5 5.2-9.5 9.9-6.3-4.5Z" fill="#F2B4AE"/>
+        <path d="M59.5 31.5c2.7-8.1-1.2-13-8.3-10.6l-7.5 5.2 9.5 9.9 6.3-4.5Z" fill="#F2B4AE"/>
+        <ellipse cx="40" cy="45" rx="24.5" ry="21.5" fill="#F8D2CC"/>
+        <circle cx="19" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
+        <circle cx="61" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
+        <ellipse cx="40" cy="50" rx="13.5" ry="9.5" fill="#F4B5AF"/>
+        <ellipse cx="35.7" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
+        <ellipse cx="44.3" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
+        <circle cx="29.5" cy="40.5" r="2" fill="#6F5751"/>
+        <circle cx="50.5" cy="40.5" r="2" fill="#6F5751"/>
+        <path d="M17.5 59.5c-1.6 1-3.3.3-3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <path d="M62.5 59.5c1.6 1 3.3.3 3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </header>
+
+    <main>
+      <section class="card checkin-card" id="checkin" aria-labelledby="formTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" id="formEyebrow">今天</p>
+            <h2 id="formTitle">今天的小记录</h2>
+          </div>
+          <span class="soft-badge" id="pastBadge" hidden>补记</span>
+        </div>
+
+        <div class="date-nav">
+          <button class="icon-button" id="prevDayBtn" type="button" aria-label="前一天">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="date-pick">
+            <input class="date-picker" id="datePicker" type="date" min="2000-01-01" aria-label="选择打卡日期">
+            <div class="date-copy" aria-hidden="true">
+              <span class="date-main" id="dateMain">10月26日 周一</span>
+              <span class="date-sub" id="dateSub">今天 · 点这里换一天</span>
+            </div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3.8v3.4M16 3.8v3.4M4 10h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <button class="icon-button" id="nextDayBtn" type="button" aria-label="后一天">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <form id="entryForm" novalidate>
+          <div class="field weight-field">
+            <div class="field-row">
+              <label for="weightInput">体重</label>
+              <span class="field-hint">可以留空</span>
+            </div>
+            <div class="weight-box">
+              <input class="weight-input" id="weightInput" type="number" inputmode="decimal" step="0.1" min="0" max="500" placeholder="0.0" autocomplete="off">
+              <span class="weight-unit" aria-hidden="true">kg</span>
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend class="field-label">月经状态</legend>
+            <div class="period-options">
+              <button class="period-btn" type="button" data-period="none" aria-pressed="true">没来</button>
+              <button class="period-btn" type="button" data-period="light" aria-pressed="false">来了·少</button>
+              <button class="period-btn" type="button" data-period="mid" aria-pressed="false">来了·中</button>
+              <button class="period-btn" type="button" data-period="heavy" aria-pressed="false">来了·多</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label">身体感受</legend>
+            <div class="symptom-options">
+              <button class="symptom-btn" type="button" data-symptom="痛经" aria-pressed="false">痛经</button>
+              <button class="symptom-btn" type="button" data-symptom="头晕" aria-pressed="false">头晕</button>
+              <button class="symptom-btn" type="button" data-symptom="乏力" aria-pressed="false">乏力</button>
+              <button class="symptom-btn" type="button" data-symptom="失眠" aria-pressed="false">失眠</button>
+              <button class="symptom-btn" type="button" data-symptom="食欲差" aria-pressed="false">食欲差</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label">心情 <span class="field-hint">可以不选</span></legend>
+            <div class="mood-options">
+              <button class="mood-btn" type="button" data-mood="good" aria-pressed="false">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12.5" fill="#FFF8F4" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="11.6" cy="13.5" r="1.4" fill="currentColor"/>
+                  <circle cx="20.4" cy="13.5" r="1.4" fill="currentColor"/>
+                  <path d="M11 18.7c1.6 2.7 3.3 3.9 5 3.9s3.4-1.2 5-3.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>好</span>
+              </button>
+              <button class="mood-btn" type="button" data-mood="okay" aria-pressed="false">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12.5" fill="#FFF8F4" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="11.6" cy="13.5" r="1.4" fill="currentColor"/>
+                  <circle cx="20.4" cy="13.5" r="1.4" fill="currentColor"/>
+                  <path d="M12 20.3h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>一般</span>
+              </button>
+              <button class="mood-btn" type="button" data-mood="tired" aria-pressed="false">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12.5" fill="#FFF8F4" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M9.8 14.2c1.1-1.2 2.4-1.2 3.5 0M18.7 14.2c1.1-1.2 2.4-1.2 3.5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M13.2 20.2c1.7-.8 3.9-.8 5.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>累</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <div class="save-zone">
+            <button class="save-button" id="saveBtn" type="submit">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/></svg>
+              <span id="saveBtnLabel">记下这一天</span>
+            </button>
+            <div class="save-burst" id="saveBurst" aria-hidden="true"></div>
+          </div>
+
+          <div class="save-feedback" id="saveFeedback" aria-live="polite">
+            <svg class="feedback-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/></svg>
+            <div>
+              <span class="feedback-label" id="feedbackLabel">记好啦，送你一句</span>
+              <p class="feedback-quote" id="feedbackQuote"></p>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="card chart-card" aria-labelledby="chartTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">慢慢看</p>
+            <h2 id="chartTitle">体重趋势</h2>
+          </div>
+          <span class="latest-pill" id="latestWeight">还没有记录</span>
+        </div>
+        <div class="chart-toolbar">
+          <div class="range-switch" role="group" aria-label="图表时间范围">
+            <button class="range-btn" type="button" data-range="30" aria-pressed="true">最近 30 天</button>
+            <button class="range-btn" type="button" data-range="90" aria-pressed="false">最近 90 天</button>
+          </div>
+          <span class="chart-target-legend" id="targetLegend" hidden></span>
+        </div>
+        <div class="chart-box">
+          <svg class="weight-chart" id="weightChart" viewBox="0 0 380 178" role="img" aria-label="体重趋势图" hidden></svg>
+          <div class="chart-empty" id="chartEmpty">
+            <svg viewBox="0 0 64 42" aria-hidden="true"><path d="M5 32c7-1 9-12 16-12s8 8 14 8 8-14 15-14 7 8 9 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="32" r="2.5" fill="currentColor"/><circle cx="59" cy="24" r="2.5" fill="currentColor"/></svg>
+            <span id="chartEmptyText">还没有体重记录，称一称就能画出来啦。</span>
+          </div>
+        </div>
+        <p class="gentle-line">慢慢来，不着急</p>
+      </section>
+
+      <section class="card calendar-card" aria-labelledby="calendarTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">一月一月</p>
+            <h2 id="calendarTitle">月经日历</h2>
+          </div>
+        </div>
+        <div class="month-nav">
+          <button class="month-btn" id="prevMonthBtn" type="button" aria-label="上个月">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="month-title" id="monthTitle" aria-live="polite"></span>
+          <button class="month-btn" id="nextMonthBtn" type="button" aria-label="下个月">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="weekdays" aria-hidden="true">
+          <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid" aria-label="月经日历"></div>
+        <div class="calendar-legend" aria-label="来潮颜色由浅到深对应流量少到多">
+          <span class="legend-item"><span class="legend-dot legend-light"></span>少</span>
+          <span class="legend-item"><span class="legend-dot legend-mid"></span>中</span>
+          <span class="legend-item"><span class="legend-dot legend-heavy"></span>多</span>
+        </div>
+        <div class="cycle-summary">
+          <div class="cycle-grid">
+            <div>
+              <span class="cycle-stat-label">最近一次来潮</span>
+              <span class="cycle-stat-value is-empty" id="lastPeriodValue">还没有记录</span>
+            </div>
+            <div>
+              <span class="cycle-stat-label">平均间隔</span>
+              <span class="cycle-stat-value is-empty" id="averageCycleValue">还没有记录</span>
+            </div>
+          </div>
+          <div class="cycle-intervals">
+            <span class="cycle-intervals-label">最近三次间隔</span>
+            <div class="cycle-tags" id="cycleTags"><span class="cycle-empty">再多记几次就有啦</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card records-card" aria-labelledby="recordsTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">回头看看</p>
+            <h2 id="recordsTitle">我们的记录</h2>
+          </div>
+          <span class="count-pill" id="recordCount" hidden></span>
+        </div>
+        <div class="load-error" id="loadError" hidden>
+          <p>记录暂时没有打开，再试一次吧。</p>
+          <button class="retry-btn" id="retryBtn" type="button">再试一次</button>
+        </div>
+        <div class="records-list" id="recordsList">
+          <div class="records-loading"><span class="loading-dot"></span>正在轻轻翻页…</div>
+        </div>
+        <p class="records-hint" id="recordsHint" hidden>点一张小卡片，就能回到上面改一改。</p>
+      </section>
+
+      <section class="card export-card" aria-labelledby="exportTitle">
+        <h2 id="exportTitle">把记录带走</h2>
+        <p class="export-copy">全部记录会整理成一个 CSV 文件，用 Excel 打开也不会乱码。</p>
+        <a class="export-button" id="exportBtn" href="#" download>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          导出全部记录
+        </a>
+        <p class="export-note">只属于我们两个人的小本子，没有别的地方会看到。</p>
+      </section>
+    </main>
+
+    <footer class="page-footer">我们的小日子 · 慢慢来</footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <template id="recordTemplate">
+    <button class="record-item" type="button">
+      <span class="record-top">
+        <span class="record-date-wrap">
+          <span class="record-date"></span>
+          <span class="record-weekday"></span>
+        </span>
+        <span class="record-weight"><span class="record-weight-value"></span><span class="record-weight-unit">kg</span></span>
+      </span>
+      <span class="record-meta">
+        <span class="record-period"><span class="period-dot"></span><span class="record-period-label"></span></span>
+        <span class="record-mood" hidden></span>
+      </span>
+      <span class="record-symptoms" hidden></span>
+      <span class="record-footer">
+        <span class="record-message"></span>
+        <svg class="record-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+  </template>
+
+  <script>
+    // ============================================================
+    // 想改鼓励话，只改下面这个列表就好。
+    // 每次保存会从里面随机挑一句，同时存进当天的记录里。
+    // ============================================================
+    const ENCOURAGEMENTS = [
+      '今天也辛苦啦',
+      '好好吃饭，慢慢来',
+      '摸摸头，你在好好照顾自己',
+      '有在认真生活呀',
+      '慢慢来，不着急',
+      '今天也值得被温柔对待',
+      '谢谢你这么用心',
+      '累的话，就多歇一会儿',
+      '每一天都算数',
+      '抱抱你，今天也很棒',
+      '日子小小的，也亮亮的',
+      '记得对自己温柔一点',
+      '我们还有很多个明天',
+      '辛苦了，去喝口水吧',
+    ];
+
+    // ============================================================
+    // 可选目标体重：填一个数字（例如 55.0）就会出现虚线。
+    // 不想显示就保持 null。
+    // ============================================================
+    const TARGET_WEIGHT = null;
+
+    const PERIOD_LABELS = {
+      none: '没来',
+      light: '来了·少',
+      mid: '来了·中',
+      heavy: '来了·多',
+    };
+    const MOOD_LABELS = {
+      good: '好',
+      okay: '一般',
+      tired: '累',
+    };
+    const WEEKDAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const WEEKDAY_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
+
+    const token = decodeURIComponent((window.location.pathname.split('/').filter(Boolean)[0] || ''));
+    const API_BASE = `/${encodeURIComponent(token)}/api`;
+
+    const todayKey = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Shanghai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+    const todayDate = parseDateKey(todayKey);
+
+    const state = {
+      records: new Map(),
+      selectedDate: todayKey,
+      chartRange: 30,
+      calendarMonth: new Date(todayDate.getFullYear(), todayDate.getMonth(), 1),
+      loaded: false,
+      loading: true,
+      loadFailed: false,
+      saving: false,
+      form: {
+        period: 'none',
+        symptoms: new Set(),
+        mood: '',
+      },
+    };
+
+    const els = {
+      form: document.getElementById('entryForm'),
+      formEyebrow: document.getElementById('formEyebrow'),
+      formTitle: document.getElementById('formTitle'),
+      pastBadge: document.getElementById('pastBadge'),
+      datePicker: document.getElementById('datePicker'),
+      dateMain: document.getElementById('dateMain'),
+      dateSub: document.getElementById('dateSub'),
+      prevDayBtn: document.getElementById('prevDayBtn'),
+      nextDayBtn: document.getElementById('nextDayBtn'),
+      weightInput: document.getElementById('weightInput'),
+      periodBtns: Array.from(document.querySelectorAll('.period-btn')),
+      symptomBtns: Array.from(document.querySelectorAll('.symptom-btn')),
+      moodBtns: Array.from(document.querySelectorAll('.mood-btn')),
+      saveBtn: document.getElementById('saveBtn'),
+      saveBtnLabel: document.getElementById('saveBtnLabel'),
+      saveBurst: document.getElementById('saveBurst'),
+      saveFeedback: document.getElementById('saveFeedback'),
+      feedbackLabel: document.getElementById('feedbackLabel'),
+      feedbackQuote: document.getElementById('feedbackQuote'),
+      latestWeight: document.getElementById('latestWeight'),
+      chart: document.getElementById('weightChart'),
+      chartEmpty: document.getElementById('chartEmpty'),
+      chartEmptyText: document.getElementById('chartEmptyText'),
+      rangeBtns: Array.from(document.querySelectorAll('.range-btn')),
+      targetLegend: document.getElementById('targetLegend'),
+      monthTitle: document.getElementById('monthTitle'),
+      calendarGrid: document.getElementById('calendarGrid'),
+      prevMonthBtn: document.getElementById('prevMonthBtn'),
+      nextMonthBtn: document.getElementById('nextMonthBtn'),
+      lastPeriodValue: document.getElementById('lastPeriodValue'),
+      averageCycleValue: document.getElementById('averageCycleValue'),
+      cycleTags: document.getElementById('cycleTags'),
+      recordsList: document.getElementById('recordsList'),
+      recordsHint: document.getElementById('recordsHint'),
+      recordCount: document.getElementById('recordCount'),
+      loadError: document.getElementById('loadError'),
+      retryBtn: document.getElementById('retryBtn'),
+      exportBtn: document.getElementById('exportBtn'),
+      toast: document.getElementById('toast'),
+      recordTemplate: document.getElementById('recordTemplate'),
+    };
+
+    let toastTimer = null;
+
+    function pad2(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function formatDateKey(date) {
+      return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+    }
+
+    function parseDateKey(key) {
+      const [year, month, day] = key.split('-').map(Number);
+      return new Date(year, month - 1, day, 12, 0, 0);
+    }
+
+    function addDays(date, amount) {
+      const next = new Date(date);
+      next.setDate(next.getDate() + amount);
+      return next;
+    }
+
+    function daysBetweenKeys(fromKey, toKey) {
+      const [fromYear, fromMonth, fromDay] = fromKey.split('-').map(Number);
+      const [toYear, toMonth, toDay] = toKey.split('-').map(Number);
+      return Math.round((Date.UTC(toYear, toMonth - 1, toDay) - Date.UTC(fromYear, fromMonth - 1, fromDay)) / 86400000);
+    }
+
+    function formatShortDate(key, includeYear = false) {
+      const date = parseDateKey(key);
+      return `${includeYear ? `${date.getFullYear()}年` : ''}${date.getMonth() + 1}月${date.getDate()}日`;
+    }
+
+    function formatLongDate(key) {
+      const date = parseDateKey(key);
+      return `${date.getMonth() + 1}月${date.getDate()}日`;
+    }
+
+    function showToast(message) {
+      if (!message) return;
+      window.clearTimeout(toastTimer);
+      els.toast.textContent = message;
+      els.toast.classList.add('is-visible');
+      toastTimer = window.setTimeout(() => {
+        els.toast.classList.remove('is-visible');
+      }, 2800);
+    }
+
+    function getRecord(dateKey) {
+      return state.records.get(dateKey) || null;
+    }
+
+    function parseSymptoms(raw) {
+      return typeof raw === 'string' && raw ? raw.split(',').filter(Boolean) : [];
+    }
+
+    function updateDateView() {
+      const isToday = state.selectedDate === todayKey;
+      const date = parseDateKey(state.selectedDate);
+      const yearPart = date.getFullYear() !== todayDate.getFullYear() ? `${date.getFullYear()}年` : '';
+      els.dateMain.textContent = `${yearPart}${date.getMonth() + 1}月${date.getDate()}日 ${WEEKDAYS[date.getDay()]}`;
+      els.dateSub.textContent = isToday ? '今天 · 点这里换一天' : '补记 · 点这里换一天';
+      els.datePicker.value = state.selectedDate;
+      els.datePicker.max = todayKey;
+      els.nextDayBtn.disabled = state.selectedDate >= todayKey;
+      els.prevDayBtn.disabled = state.selectedDate <= '2000-01-01';
+      els.pastBadge.hidden = isToday;
+      els.formEyebrow.textContent = isToday ? '今天' : '慢慢补上';
+      els.formTitle.textContent = isToday ? '今天的小记录' : '补记这一天';
+      const record = getRecord(state.selectedDate);
+      els.saveBtnLabel.textContent = record ? '更新这一天' : '记下这一天';
+    }
+
+    function setFormFromRecord(record) {
+      state.form.period = record?.period || 'none';
+      state.form.symptoms = new Set(parseSymptoms(record?.symptoms || ''));
+      state.form.mood = record?.mood || '';
+      els.weightInput.value = record && record.weight !== null && record.weight !== undefined
+        ? Number(record.weight).toFixed(1)
+        : '';
+      syncFormButtons();
+      if (record && record.message) {
+        showFeedback(record.message, '那天留下的话');
+      } else {
+        hideFeedback();
+      }
+    }
+
+    function syncFormButtons() {
+      els.periodBtns.forEach((button) => {
+        const active = button.dataset.period === state.form.period;
+        button.setAttribute('aria-pressed', String(active));
+      });
+      els.symptomBtns.forEach((button) => {
+        const active = state.form.symptoms.has(button.dataset.symptom);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      els.moodBtns.forEach((button) => {
+        const active = button.dataset.mood === state.form.mood;
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function showFeedback(message, label = '记好啦，送你一句') {
+      els.feedbackLabel.textContent = label;
+      els.feedbackQuote.textContent = message;
+      els.saveFeedback.classList.add('is-visible');
+    }
+
+    function hideFeedback() {
+      els.saveFeedback.classList.remove('is-visible');
+      els.feedbackQuote.textContent = '';
+    }
+
+    function renderAll() {
+      updateDateView();
+      renderChart();
+      renderCalendar();
+      renderCycles();
+      renderRecords();
+    }
+
+    function renderChart() {
+      const end = todayDate;
+      const start = addDays(end, -(state.chartRange - 1));
+      const startKey = formatDateKey(start);
+      const points = Array.from(state.records.values())
+        .filter((record) => record.weight !== null && record.weight !== undefined)
+        .filter((record) => record.date >= startKey && record.date <= todayKey)
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .map((record) => ({
+          date: record.date,
+          weight: Number(record.weight),
+        }));
+
+      const allWeightRecords = Array.from(state.records.values())
+        .filter((record) => record.weight !== null && record.weight !== undefined)
+        .sort((a, b) => b.date.localeCompare(a.date));
+      if (allWeightRecords.length) {
+        const latest = allWeightRecords[0];
+        els.latestWeight.textContent = `最近 ${Number(latest.weight).toFixed(1)} kg`;
+        els.latestWeight.title = `${formatShortDate(latest.date, true)} ${Number(latest.weight).toFixed(1)} kg`;
+      } else {
+        els.latestWeight.textContent = '还没有记录';
+      }
+
+      const hasTarget = TARGET_WEIGHT !== null && Number.isFinite(Number(TARGET_WEIGHT));
+      if (els.targetLegend) {
+        els.targetLegend.hidden = !hasTarget || !points.length;
+        if (hasTarget) els.targetLegend.textContent = `小心愿 ${Number(TARGET_WEIGHT).toFixed(1)}`;
+      }
+
+      if (!points.length) {
+        els.chart.setAttribute('hidden', '');
+        els.chartEmpty.hidden = false;
+        if (state.loading) {
+          els.chartEmptyText.textContent = '正在轻轻翻页…';
+        } else if (state.loadFailed) {
+          els.chartEmptyText.textContent = '记录暂时没有打开，再试一次吧。';
+        } else if (allWeightRecords.length) {
+          els.chartEmptyText.textContent = `这 ${state.chartRange} 天还没有记录，换一个范围看看吧。`;
+        } else {
+          els.chartEmptyText.textContent = '还没有体重记录，称一称就能画出来啦。';
+        }
+        return;
+      }
+
+      els.chart.removeAttribute('hidden');
+      els.chartEmpty.hidden = true;
+
+      const width = Math.max(280, Math.round(els.chart.parentElement?.clientWidth || 380));
+      const height = 178;
+      els.chart.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      const margin = { top: 15, right: 14, bottom: 24, left: 33 };
+      const plotWidth = width - margin.left - margin.right;
+      const plotHeight = height - margin.top - margin.bottom;
+
+      const values = points.map((point) => point.weight);
+      if (TARGET_WEIGHT !== null && Number.isFinite(Number(TARGET_WEIGHT))) {
+        values.push(Number(TARGET_WEIGHT));
+      }
+      let minValue = Math.min(...values);
+      let maxValue = Math.max(...values);
+      const rawRange = maxValue - minValue;
+      const minRange = Math.max(1, rawRange);
+      const padding = Math.max(.4, minRange * .24);
+      minValue = Math.floor((minValue - padding) * 2) / 2;
+      maxValue = Math.ceil((maxValue + padding) * 2) / 2;
+      if (maxValue - minValue < 1) {
+        minValue -= .5;
+        maxValue += .5;
+      }
+
+      const plotStart = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+      const plotEnd = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+      const totalDays = Math.max(1, Math.round((plotEnd - plotStart) / 86400000));
+      const xForDate = (key) => {
+        const date = parseDateKey(key);
+        const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        return margin.left + ((day - plotStart) / 86400000 / totalDays) * plotWidth;
+      };
+      const yForWeight = (weight) => margin.top + ((maxValue - weight) / (maxValue - minValue)) * plotHeight;
+
+      const coords = points.map((point) => ({
+        ...point,
+        x: xForDate(point.date),
+        y: yForWeight(point.weight),
+      }));
+
+      const gridValues = [maxValue, (maxValue + minValue) / 2, minValue];
+      const gridMarkup = gridValues.map((value) => {
+        const y = yForWeight(value);
+        return `<line class="chart-grid" x1="${margin.left}" y1="${y.toFixed(1)}" x2="${width - margin.right}" y2="${y.toFixed(1)}"/>` +
+          `<text class="chart-axis-text" x="${margin.left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${value.toFixed(1)}</text>`;
+      }).join('');
+
+      let linePath = '';
+      let areaPath = '';
+      if (coords.length > 1) {
+        linePath = `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+        for (let index = 1; index < coords.length; index += 1) {
+          const previous = coords[index - 1];
+          const current = coords[index];
+          const middle = (previous.x + current.x) / 2;
+          linePath += ` C ${middle.toFixed(1)} ${previous.y.toFixed(1)}, ${middle.toFixed(1)} ${current.y.toFixed(1)}, ${current.x.toFixed(1)} ${current.y.toFixed(1)}`;
+        }
+        const baseline = height - margin.bottom;
+        areaPath = `${linePath} L ${coords[coords.length - 1].x.toFixed(1)} ${baseline} L ${coords[0].x.toFixed(1)} ${baseline} Z`;
+      }
+
+      const targetMarkup = hasTarget
+        ? (() => {
+            const y = yForWeight(Number(TARGET_WEIGHT));
+            return `<line class="chart-target" x1="${margin.left}" y1="${y.toFixed(1)}" x2="${width - margin.right}" y2="${y.toFixed(1)}"/>`;
+          })()
+        : '';
+
+      const labelIndexes = [0, Math.floor((points.length - 1) / 2), points.length - 1].filter((value, index, list) => list.indexOf(value) === index);
+      const xLabels = labelIndexes.map((index) => {
+        const date = parseDateKey(points[index].date);
+        const anchor = index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle';
+        return `<text class="chart-axis-text" x="${coords[index].x.toFixed(1)}" y="${height - 6}" text-anchor="${anchor}">${date.getMonth() + 1}/${date.getDate()}</text>`;
+      }).join('');
+
+      const dots = coords.map((point) => {
+        const date = parseDateKey(point.date);
+        const label = `${date.getMonth() + 1}月${date.getDate()}日 ${point.weight.toFixed(1)} 千克`;
+        return `<circle class="chart-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3.4" tabindex="0"><title>${label}</title></circle>`;
+      }).join('');
+
+      els.chart.setAttribute(
+        'aria-label',
+        `最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。`,
+      );
+      els.chart.innerHTML = `
+        <title>最近 ${state.chartRange} 天体重趋势</title>
+        ${gridMarkup}
+        ${targetMarkup}
+        ${areaPath ? `<path class="chart-area" d="${areaPath}"/>` : ''}
+        ${linePath ? `<path class="chart-line" d="${linePath}"/>` : ''}
+        ${dots}
+        ${xLabels}
+      `;
+    }
+
+    function renderCalendar() {
+      const month = state.calendarMonth;
+      const year = month.getFullYear();
+      const monthIndex = month.getMonth();
+      const monthLabel = `${year}年${monthIndex + 1}月`;
+      els.monthTitle.textContent = monthLabel;
+      const currentMonthIndex = todayDate.getFullYear() * 12 + todayDate.getMonth();
+      els.nextMonthBtn.disabled = year * 12 + monthIndex >= currentMonthIndex;
+
+      const firstDay = new Date(year, monthIndex, 1);
+      const startOffset = (firstDay.getDay() + 6) % 7;
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+      const fragment = document.createDocumentFragment();
+
+      for (let cell = 0; cell < totalCells; cell += 1) {
+        const dayNumber = cell - startOffset + 1;
+        const cellWrap = document.createElement('div');
+        cellWrap.className = 'day-cell';
+        if (dayNumber < 1 || dayNumber > daysInMonth) {
+          fragment.appendChild(cellWrap);
+          continue;
+        }
+
+        const dayDate = new Date(year, monthIndex, dayNumber, 12);
+        const key = formatDateKey(dayDate);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'day-btn';
+        button.dataset.date = key;
+        button.textContent = String(dayNumber);
+        const record = getRecord(key);
+        const flow = record?.period || 'none';
+        if (flow !== 'none') button.classList.add(`flow-${flow}`);
+        if (key === todayKey) {
+          button.classList.add('is-today');
+          button.setAttribute('aria-current', 'date');
+        }
+        const label = `${formatShortDate(key, year !== todayDate.getFullYear())}${flow !== 'none' ? `，${PERIOD_LABELS[flow]}` : ''}${key === todayKey ? '，今天' : ''}`;
+        button.setAttribute('aria-label', label);
+        if (key > todayKey) {
+          button.disabled = true;
+        }
+        cellWrap.appendChild(button);
+        fragment.appendChild(cellWrap);
+      }
+
+      els.calendarGrid.replaceChildren(fragment);
+    }
+
+    function renderCycles() {
+      const periodDays = Array.from(state.records.values())
+        .filter((record) => record.period && record.period !== 'none')
+        .map((record) => record.date)
+        .sort();
+      const episodes = [];
+      let previousDay = null;
+
+      periodDays.forEach((key) => {
+        if (!previousDay || daysBetweenKeys(previousDay, key) > 7) {
+          episodes.push({ start: key, end: key });
+        } else {
+          episodes[episodes.length - 1].end = key;
+        }
+        previousDay = key;
+      });
+
+      if (!episodes.length) {
+        els.lastPeriodValue.textContent = '还没有记录';
+        els.lastPeriodValue.classList.add('is-empty');
+        els.averageCycleValue.textContent = '还没有记录';
+        els.averageCycleValue.classList.add('is-empty');
+        els.cycleTags.innerHTML = '<span class="cycle-empty">再多记几次就有啦</span>';
+        return;
+      }
+
+      const latestEpisode = episodes[episodes.length - 1];
+      els.lastPeriodValue.textContent = formatShortDate(latestEpisode.start, parseDateKey(latestEpisode.start).getFullYear() !== todayDate.getFullYear());
+      els.lastPeriodValue.classList.remove('is-empty');
+
+      const intervals = [];
+      for (let index = 1; index < episodes.length; index += 1) {
+        intervals.push(daysBetweenKeys(episodes[index - 1].start, episodes[index].start));
+      }
+
+      if (!intervals.length) {
+        els.averageCycleValue.textContent = '还差一次记录';
+        els.averageCycleValue.classList.add('is-empty');
+        els.cycleTags.innerHTML = '<span class="cycle-empty">再多记几次就有啦</span>';
+        return;
+      }
+
+      const recent = intervals.slice(-3);
+      const average = Math.round(recent.reduce((sum, days) => sum + days, 0) / recent.length);
+      els.averageCycleValue.textContent = `${average} 天`;
+      els.averageCycleValue.classList.remove('is-empty');
+
+      const fragment = document.createDocumentFragment();
+      recent.slice().reverse().forEach((days) => {
+        const tag = document.createElement('span');
+        tag.className = 'cycle-tag';
+        tag.textContent = `${days} 天`;
+        fragment.appendChild(tag);
+      });
+      els.cycleTags.replaceChildren(fragment);
+    }
+
+    function renderRecords() {
+      els.loadError.hidden = !state.loadFailed;
+      els.recordCount.hidden = !state.loaded || state.records.size === 0;
+      els.recordCount.textContent = `${state.records.size} 天`;
+
+      if (state.loading) {
+        els.recordsList.innerHTML = '<div class="records-loading"><span class="loading-dot"></span>正在轻轻翻页…</div>';
+        els.recordsHint.hidden = true;
+        return;
+      }
+
+      if (state.loadFailed) {
+        els.recordsList.replaceChildren();
+        els.recordsHint.hidden = true;
+        return;
+      }
+
+      const records = Array.from(state.records.values()).sort((a, b) => b.date.localeCompare(a.date));
+      if (!records.length) {
+        const empty = document.createElement('div');
+        empty.className = 'records-empty';
+        empty.textContent = '这里还空空的，记下今天的第一笔吧。';
+        els.recordsList.replaceChildren(empty);
+        els.recordsHint.hidden = true;
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      records.forEach((record) => {
+        const node = els.recordTemplate.content.firstElementChild.cloneNode(true);
+        const date = parseDateKey(record.date);
+        const dateText = date.getFullYear() === todayDate.getFullYear()
+          ? `${pad2(date.getMonth() + 1)}.${pad2(date.getDate())}`
+          : `${date.getFullYear()}.${pad2(date.getMonth() + 1)}.${pad2(date.getDate())}`;
+        node.querySelector('.record-date').textContent = dateText;
+        node.querySelector('.record-weekday').textContent = WEEKDAYS[date.getDay()];
+
+        const weightValue = node.querySelector('.record-weight-value');
+        const weightUnit = node.querySelector('.record-weight-unit');
+        if (record.weight !== null && record.weight !== undefined) {
+          weightValue.textContent = Number(record.weight).toFixed(1);
+          weightUnit.hidden = false;
+        } else {
+          weightValue.textContent = '—';
+          weightUnit.hidden = true;
+          node.querySelector('.record-weight').classList.add('is-empty');
+        }
+
+        node.querySelector('.record-period-label').textContent = PERIOD_LABELS[record.period] || PERIOD_LABELS.none;
+        node.querySelector('.period-dot').classList.add(record.period || 'none');
+        const moodNode = node.querySelector('.record-mood');
+        if (record.mood && MOOD_LABELS[record.mood]) {
+          moodNode.hidden = false;
+          moodNode.textContent = `心情 ${MOOD_LABELS[record.mood]}`;
+        }
+
+        const symptoms = parseSymptoms(record.symptoms);
+        const symptomWrap = node.querySelector('.record-symptoms');
+        if (symptoms.length) {
+          symptomWrap.hidden = false;
+          symptoms.forEach((symptom) => {
+            const chip = document.createElement('span');
+            chip.className = 'mini-chip';
+            chip.textContent = symptom;
+            symptomWrap.appendChild(chip);
+          });
+        }
+
+        node.querySelector('.record-message').textContent = record.message ? `“${record.message}”` : '';
+        node.dataset.date = record.date;
+        node.setAttribute('aria-label', `查看并修改 ${formatShortDate(record.date, date.getFullYear() !== todayDate.getFullYear())} 的记录`);
+        node.addEventListener('click', () => {
+          selectDate(record.date, { scroll: true });
+        });
+        fragment.appendChild(node);
+      });
+      els.recordsList.replaceChildren(fragment);
+      els.recordsHint.hidden = false;
+    }
+
+    function selectDate(dateKey, options = {}) {
+      if (dateKey > todayKey) {
+        showToast('未来的日子还没到呢，先记今天吧。');
+        return;
+      }
+      state.selectedDate = dateKey;
+      const selected = parseDateKey(dateKey);
+      state.calendarMonth = new Date(selected.getFullYear(), selected.getMonth(), 1);
+      setFormFromRecord(getRecord(dateKey));
+      updateDateView();
+      renderCalendar();
+      if (options.scroll) {
+        document.getElementById('checkin').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function chooseEncouragement(previous) {
+      if (ENCOURAGEMENTS.length === 0) return '今天也辛苦啦';
+      if (ENCOURAGEMENTS.length === 1) return ENCOURAGEMENTS[0];
+      let candidate = previous;
+      for (let attempt = 0; candidate === previous && attempt < 12; attempt += 1) {
+        candidate = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+      }
+      return candidate || ENCOURAGEMENTS[0];
+    }
+
+    function playHeart() {
+      const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      heart.setAttribute('viewBox', '0 0 24 24');
+      heart.setAttribute('class', 'floating-heart');
+      heart.setAttribute('aria-hidden', 'true');
+      heart.innerHTML = '<path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/>';
+      els.saveBurst.appendChild(heart);
+      heart.addEventListener('animationend', () => heart.remove(), { once: true });
+      window.setTimeout(() => heart.remove(), 1400);
+    }
+
+    function setSaving(saving) {
+      state.saving = saving;
+      els.saveBtn.disabled = saving;
+      els.saveBtn.classList.toggle('is-busy', saving);
+      els.saveBtnLabel.textContent = saving
+        ? '正在轻轻记下…'
+        : (getRecord(state.selectedDate) ? '更新这一天' : '记下这一天');
+    }
+
+    async function saveEntry(event) {
+      event.preventDefault();
+      if (state.saving) return;
+
+      const weightText = els.weightInput.value.trim();
+      let weight = null;
+      if (weightText !== '') {
+        const parsed = Number(weightText);
+        if (!Number.isFinite(parsed) || parsed < 0 || parsed > 500) {
+          showToast('体重数字好像没有填对，再检查一下呀。');
+          els.weightInput.focus();
+          return;
+        }
+        weight = Math.round(parsed * 10) / 10;
+      }
+
+      const previousMessage = getRecord(state.selectedDate)?.message || '';
+      const message = chooseEncouragement(previousMessage);
+      const body = {
+        date: state.selectedDate,
+        weight,
+        period: state.form.period,
+        symptoms: Array.from(state.form.symptoms),
+        mood: state.form.mood,
+        message,
+      };
+
+      setSaving(true);
+      try {
+        const response = await fetch(`${API_BASE}/records`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || '这次没有保存成功，请稍后再试一次。');
+
+        const saved = result.record || { ...body, updated_at: new Date().toISOString() };
+        state.records.set(saved.date, saved);
+        state.loaded = true;
+        state.loadFailed = false;
+        setFormFromRecord(saved);
+        renderAll();
+        showFeedback(saved.message, '记好啦，送你一句');
+        playHeart();
+      } catch (error) {
+        showToast(error.message || '网络好像打了个盹，再试一次吧。');
+      } finally {
+        setSaving(false);
+        updateDateView();
+      }
+    }
+
+    async function loadRecords() {
+      state.loading = true;
+      state.loadFailed = false;
+      renderRecords();
+      renderChart();
+      try {
+        const response = await fetch(`${API_BASE}/records`, {
+          headers: { accept: 'application/json' },
+          cache: 'no-store',
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || '记录暂时没有打开。');
+        const records = Array.isArray(result.records) ? result.records : [];
+        state.records = new Map(records.map((record) => [record.date, record]));
+        state.loaded = true;
+        state.loading = false;
+        state.loadFailed = false;
+        setFormFromRecord(getRecord(state.selectedDate));
+        renderAll();
+      } catch (error) {
+        state.loading = false;
+        state.loadFailed = true;
+        renderAll();
+        showToast(error.message || '记录暂时没有打开，再试一次吧。');
+      }
+    }
+
+    els.datePicker.addEventListener('change', () => {
+      if (!els.datePicker.value) {
+        updateDateView();
+        return;
+      }
+      selectDate(els.datePicker.value);
+    });
+
+    els.prevDayBtn.addEventListener('click', () => {
+      selectDate(formatDateKey(addDays(parseDateKey(state.selectedDate), -1)));
+    });
+
+    els.nextDayBtn.addEventListener('click', () => {
+      const next = formatDateKey(addDays(parseDateKey(state.selectedDate), 1));
+      if (next <= todayKey) selectDate(next);
+    });
+
+    els.periodBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        state.form.period = button.dataset.period;
+        syncFormButtons();
+      });
+    });
+
+    els.symptomBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        const symptom = button.dataset.symptom;
+        if (state.form.symptoms.has(symptom)) {
+          state.form.symptoms.delete(symptom);
+        } else {
+          state.form.symptoms.add(symptom);
+        }
+        syncFormButtons();
+      });
+    });
+
+    els.moodBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        state.form.mood = state.form.mood === button.dataset.mood ? '' : button.dataset.mood;
+        syncFormButtons();
+      });
+    });
+
+    els.rangeBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        state.chartRange = Number(button.dataset.range);
+        els.rangeBtns.forEach((item) => {
+          item.setAttribute('aria-pressed', String(item === button));
+        });
+        renderChart();
+      });
+    });
+
+    els.prevMonthBtn.addEventListener('click', () => {
+      state.calendarMonth = new Date(state.calendarMonth.getFullYear(), state.calendarMonth.getMonth() - 1, 1);
+      renderCalendar();
+    });
+
+    els.nextMonthBtn.addEventListener('click', () => {
+      const next = new Date(state.calendarMonth.getFullYear(), state.calendarMonth.getMonth() + 1, 1);
+      const thisMonth = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+      if (next <= thisMonth) {
+        state.calendarMonth = next;
+        renderCalendar();
+      }
+    });
+
+    els.calendarGrid.addEventListener('click', (event) => {
+      const button = event.target.closest('.day-btn');
+      if (!button || button.disabled) return;
+      selectDate(button.dataset.date, { scroll: true });
+    });
+
+    els.retryBtn.addEventListener('click', loadRecords);
+    els.form.addEventListener('submit', saveEntry);
+    els.exportBtn.addEventListener('click', (event) => {
+      if (!state.loaded) {
+        event.preventDefault();
+        showToast('记录还在轻轻翻页，稍等一下呀。');
+      }
+    });
+
+    let chartWidth = 0;
+    if ('ResizeObserver' in window && els.chart.parentElement) {
+      const chartObserver = new ResizeObserver((entries) => {
+        const width = Math.round(entries[0].contentRect.width);
+        if (!width || width === chartWidth) return;
+        chartWidth = width;
+        if (state.records.size) renderChart();
+      });
+      chartObserver.observe(els.chart.parentElement);
+    }
+
+    els.exportBtn.href = `${API_BASE}/export`;
+    els.datePicker.max = todayKey;
+    els.datePicker.min = '2000-01-01';
+    els.datePicker.value = todayKey;
+    els.weightInput.value = '';
+    updateDateView();
+    syncFormButtons();
+    loadRecords();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "our-little-days",
+  "pages_build_output_dir": "public",
+  "compatibility_date": "2025-11-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "our-little-days-db",
+      "database_id": "6c28a62e-0732-419f-9e05-5457fe0d88c8"
+    }
+  ]
+}

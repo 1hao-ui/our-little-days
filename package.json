@@ -1,0 +1,18 @@
+{
+  "name": "our-little-days",
+  "version": "1.0.0",
+  "private": true,
+  "description": "两个人的健康记录小页面：月经与体重。Cloudflare Pages + D1。",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/wrangler.mjs pages dev public --port 8788 --ip 127.0.0.1",
+    "db:local": "node scripts/wrangler.mjs d1 execute our-little-days-db --local --file=./schema.sql",
+    "db:remote": "node scripts/wrangler.mjs d1 execute our-little-days-db --remote --file=./schema.sql --yes",
+    "deploy": "node scripts/wrangler.mjs pages deploy public --project-name=our-little-days --branch=main"
+  },
+  "devDependencies": {
+    "wrangler": "^4.152.0"
+  }
+}
