@@ -22,6 +22,7 @@ const MOOD_LABELS = {
   tired: '累',
 };
 const APP_TIME_ZONE = 'Asia/Shanghai';
+const ICON_FILES = new Set(['pig-32.png', 'pig-180.png', 'pig-192.png', 'pig-512.png']);
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -268,7 +269,89 @@ async function handleApi(request, env, endpoint) {
   return json({ error: '没有找到这个接口。' }, 404);
 }
 
-async function serveApp(env, request) {
+function basePath(token) {
+  return `/${encodeURIComponent(token)}`;
+}
+
+function appManifest(token) {
+  const base = basePath(token);
+  const scope = `${base}/`;
+  const body = {
+    id: scope,
+    name: '我们的小日子',
+    short_name: '小日子',
+    description: '两个人的健康记录小本子',
+    start_url: scope,
+    scope,
+    display: 'standalone',
+    background_color: '#FFF9F5',
+    theme_color: '#FFF9F5',
+    orientation: 'portrait-primary',
+    lang: 'zh-CN',
+    icons: [
+      {
+        src: `${base}/icons/pig-192.png`,
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: `${base}/icons/pig-512.png`,
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: `${base}/icons/pig-512.png`,
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
+    ],
+  };
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      'content-type': 'application/manifest+json; charset=utf-8',
+      'cache-control': 'no-store',
+    },
+  });
+}
+
+async function serveIcon(env, request, filename) {
+  if (!env.ASSETS) {
+    console.error('ASSETS binding is missing.');
+    return new Response('图标暂时没有准备好。', { status: 500 });
+  }
+  const assetUrl = new URL(request.url);
+  assetUrl.pathname = `/icons/${filename}`;
+  assetUrl.search = '';
+  const response = await env.ASSETS.fetch(
+    new Request(assetUrl.toString(), {
+      method: request.method,
+      headers: request.headers,
+    }),
+  );
+  if (!response.ok) return notFound();
+  const headers = new Headers(response.headers);
+  headers.delete('access-control-allow-origin');
+  headers.set('content-type', 'image/png');
+  headers.set('cache-control', 'public, max-age=31536000, immutable');
+  return new Response(response.body, { status: response.status, headers });
+}
+
+function injectPwaTags(html, token) {
+  const base = basePath(token);
+  const tags = [
+    `<link rel="icon" type="image/png" sizes="32x32" href="${base}/icons/pig-32.png">`,
+    `<link rel="apple-touch-icon" sizes="180x180" href="${base}/icons/pig-180.png">`,
+    `<link rel="manifest" href="${base}/manifest.webmanifest">`,
+  ].join('\n    ');
+  if (!html.includes('</head>')) return html;
+  return html.replace('</head>', `    ${tags}\n  </head>`);
+}
+
+async function serveApp(env, request, token) {
   if (!env.ASSETS) {
     console.error('ASSETS binding is missing.');
     return new Response('页面暂时没有准备好。', { status: 500 });
@@ -283,6 +366,8 @@ async function serveApp(env, request) {
   const response = await env.ASSETS.fetch(assetRequest);
   const headers = new Headers(response.headers);
   headers.delete('access-control-allow-origin');
+  headers.delete('content-length');
+  headers.delete('etag');
   headers.set(
     'content-security-policy',
     [
@@ -292,6 +377,7 @@ async function serveApp(env, request) {
       "img-src 'self' data:",
       "connect-src 'self'",
       "font-src 'self'",
+      "manifest-src 'self'",
       "object-src 'none'",
       "base-uri 'none'",
       "form-action 'none'",
@@ -299,7 +385,8 @@ async function serveApp(env, request) {
     ].join('; '),
   );
   headers.set('cache-control', 'no-store');
-  return new Response(response.body, {
+  const html = request.method === 'HEAD' ? '' : injectPwaTags(await response.text(), token);
+  return new Response(html || null, {
     status: response.status,
     headers,
   });
@@ -350,9 +437,22 @@ export default {
       return withSecurityHeaders(notFound());
     }
 
+    if (parts[1] === 'manifest.webmanifest' && parts.length === 2) {
+      return withSecurityHeaders(appManifest(token));
+    }
+
+    if (parts[1] === 'icons' && parts.length === 3 && ICON_FILES.has(parts[2])) {
+      try {
+        return withSecurityHeaders(await serveIcon(env, request, parts[2]));
+      } catch (error) {
+        console.error('Failed to serve icon:', error);
+        return withSecurityHeaders(notFound());
+      }
+    }
+
     if (parts.length === 1) {
       try {
-        return withSecurityHeaders(await serveApp(env, request));
+        return withSecurityHeaders(await serveApp(env, request, token));
       } catch (error) {
         console.error('Failed to serve app:', error);
         return withSecurityHeaders(

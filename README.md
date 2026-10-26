@@ -1,5 +1,7 @@
 # 我们的小日子
 
+<img src="public/icons/pig-192.png" width="112" alt="粉色小猪图标">
+
 两个人共用的手机优先健康记录页：记月经、体重、身体感受和心情，也能看趋势、日历和全部明细。
 
 - 前端：纯 HTML + 内联 CSS/JS，放在 Cloudflare Pages
@@ -32,6 +34,7 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 - 周期统计：最近一次来潮、最近三次间隔、平均间隔
 - 明细列表：按日期倒序；点击任意一条回到打卡区修改
 - CSV 导出：UTF-8 带 BOM，Excel 打开中文不乱码
+- 自定义粉色小猪 PWA 图标，iPhone 和 Android 都可以添加到主屏幕
 - 全站无账号、无第三方统计、无外部脚本；数据只在 D1
 - 移动端优先，桌面端居中，内容宽度约 420px
 
@@ -45,7 +48,9 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 our-little-days/
 ├─ public/
 │  ├─ index.html          # 页面、样式、交互、图表、日历全部在这里
-│  └─ _worker.js          # Pages Worker：路径门禁 + API + D1 + CSV
+│  ├─ _worker.js          # Pages Worker：路径门禁 + API + D1 + CSV + PWA
+│  └─ icons/              # 小猪主屏幕图标 32/180/192/512
+├─ assets/pig-icon.svg    # 小猪图标源文件
 ├─ schema.sql             # D1 表结构
 ├─ wrangler.jsonc         # Pages 项目、D1 绑定、兼容日期
 ├─ scripts/wrangler.mjs   # 包一层 Wrangler，顺带处理 Windows 临时目录
@@ -78,6 +83,14 @@ http://127.0.0.1:8788/<.dev.vars 里的 APP_SECRET>
 `.dev.vars` 里已经有一条现成的 48 位随机密钥，直接复制等号后面的值即可。根路径打不开是正常的，必须带着密钥路径访问。
 
 停止服务后，本地数据保存在 `.wrangler/state/`，下次启动还在。想重新开始，可以删掉 `.wrangler/state/` 后重新执行 `npm run db:local`。
+
+### 添加到手机主屏幕
+
+- iPhone / iPad：用 Safari 打开完整网址，点分享按钮，选「添加到主屏幕」。
+- Android：用 Chrome 打开完整网址，点右上角菜单，选「安装应用」或「添加到主屏幕」。
+- 微信内置浏览器不支持添加：点右上角「…」→「在浏览器打开」，再按上面的方法操作。
+
+小猪图标由 Worker 动态生成 manifest，`start_url` 和图标路径都会自动带上当前 `APP_SECRET`，不会把密钥写进静态文件。如果手机上还留着旧图标，先删掉旧快捷方式，再用最新页面重新添加。
 
 ---
 
