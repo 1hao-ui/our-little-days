@@ -1,6 +1,6 @@
 # 我们的小日子
 
-<img src="public/icons/pig-192.png" width="112" alt="粉色小猪图标">
+<img src="public/icons/pig-cozy-192.png" width="112" alt="粉色小猪图标">
 
 两个人共用的手机优先健康记录页：记月经、体重、身体感受和心情，也能看趋势、日历和全部明细。
 
@@ -51,7 +51,7 @@ our-little-days/
 │  ├─ index.html          # 页面、样式、交互、图表、日历全部在这里
 │  ├─ _worker.js          # Pages Worker：路径门禁 + API + D1 + CSV + PWA
 │  └─ icons/              # 小猪主屏幕图标 32/180/192/512
-├─ assets/                # 小猪图标 SVG 源文件
+├─ assets/                # 小猪图标源图
 ├─ android/               # Android WebView 包装工程
 ├─ schema.sql             # D1 表结构
 ├─ wrangler.jsonc         # Pages 项目、D1 绑定、兼容日期

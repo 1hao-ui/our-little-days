@@ -22,7 +22,12 @@ const MOOD_LABELS = {
   tired: '累',
 };
 const APP_TIME_ZONE = 'Asia/Shanghai';
-const ICON_FILES = new Set(['pig-32.png', 'pig-180.png', 'pig-192.png', 'pig-512.png']);
+const ICON_FILES = new Set([
+  'pig-cozy-32.png',
+  'pig-cozy-180.png',
+  'pig-cozy-192.png',
+  'pig-cozy-512.png',
+]);
 const DOWNLOAD_FILES = new Set(['our-little-days.apk']);
 
 function json(data, status = 200, extraHeaders = {}) {
@@ -291,19 +296,19 @@ function appManifest(token) {
     lang: 'zh-CN',
     icons: [
       {
-        src: `${base}/icons/pig-192.png`,
+        src: `${base}/icons/pig-cozy-192.png`,
         sizes: '192x192',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: `${base}/icons/pig-512.png`,
+        src: `${base}/icons/pig-cozy-512.png`,
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: `${base}/icons/pig-512.png`,
+        src: `${base}/icons/pig-cozy-512.png`,
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',
@@ -367,8 +372,8 @@ async function serveDownload(env, request, filename) {
 function injectPwaTags(html, token) {
   const base = basePath(token);
   const tags = [
-    `<link rel="icon" type="image/png" sizes="32x32" href="${base}/icons/pig-32.png">`,
-    `<link rel="apple-touch-icon" sizes="180x180" href="${base}/icons/pig-180.png">`,
+    `<link rel="icon" type="image/png" sizes="32x32" href="${base}/icons/pig-cozy-32.png">`,
+    `<link rel="apple-touch-icon" sizes="180x180" href="${base}/icons/pig-cozy-180.png">`,
     `<link rel="manifest" href="${base}/manifest.webmanifest">`,
   ].join('\n    ');
   if (!html.includes('</head>')) return html;
