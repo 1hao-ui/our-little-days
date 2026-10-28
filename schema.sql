@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS records (
   symptoms TEXT,
   mood TEXT,
   message TEXT,
+  breakfast INTEGER,
+  nuts INTEGER,
+  milk INTEGER,
+  positives TEXT,
   updated_at TEXT
 );
 

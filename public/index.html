@@ -23,6 +23,9 @@
       --pink-soft: #FDE7E9;
       --pink-wash: #FFF1EF;
       --apricot: #F6D8C4;
+      --butter: #FBF0DA;
+      --butter-line: #EED9B4;
+      --butter-deep: #9A6F3E;
       --line: #F1E4DD;
       --text: #5A4F4C;
       --muted: #9B8A83;
@@ -417,11 +420,103 @@
       font-weight: 700;
     }
 
+    .habit-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .habit-btn {
+      display: flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 6px;
+      border: 1px solid #F0E5DF;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: #8A7872;
+      font-size: 11.5px;
+      white-space: nowrap;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .habit-check {
+      display: grid;
+      width: 16px;
+      height: 16px;
+      flex: none;
+      place-items: center;
+      border: 1.3px solid #D9C8C1;
+      border-radius: 50%;
+      color: transparent;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease);
+    }
+
+    .habit-check svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .habit-btn:hover {
+      border-color: #EBD6C6;
+      background: #FFF9F2;
+    }
+
+    .habit-btn:active {
+      transform: scale(.97);
+    }
+
+    .habit-btn[aria-pressed="true"] {
+      border-color: var(--butter-line);
+      background: var(--butter);
+      color: #876440;
+      font-weight: 650;
+    }
+
+    .habit-btn[aria-pressed="true"] .habit-check {
+      border-color: #DFB275;
+      background: #DFB275;
+      color: #FFFDFC;
+    }
+
+    .sensation-group + .sensation-group {
+      margin-top: 12px;
+    }
+
+    .sensation-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #B18E87;
+      font-size: 10px;
+      letter-spacing: .03em;
+    }
+
+    .sensation-label.positive {
+      color: #A47C52;
+    }
+
+    .sensation-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #E8B7B7;
+    }
+
+    .sensation-dot.positive {
+      background: #DFB275;
+    }
+
     .symptom-options {
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
-      margin-top: 9px;
+      margin-top: 7px;
     }
 
     .symptom-btn {
@@ -450,6 +545,12 @@
       background: var(--pink-soft);
       color: #875659;
       font-weight: 650;
+    }
+
+    .positive-btn[aria-pressed="true"] {
+      border-color: var(--butter-line);
+      background: var(--butter);
+      color: #8C6848;
     }
 
     .mood-options {
@@ -1095,7 +1196,8 @@
       background: #E1848E;
     }
 
-    .record-symptoms {
+    .record-symptoms,
+    .record-habits {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
@@ -1108,6 +1210,37 @@
       background: #FFFFFF;
       color: #927D76;
       font-size: 9.5px;
+    }
+
+    .mini-chip.positive {
+      background: var(--butter);
+      color: #8A6845;
+    }
+
+    .habit-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      color: #A8958D;
+      font-size: 9.5px;
+    }
+
+    .habit-mini.is-done {
+      background: var(--butter);
+      color: #8A6845;
+    }
+
+    .habit-mini-mark {
+      color: #C3B0A8;
+      font-size: 9px;
+    }
+
+    .habit-mini.is-done .habit-mini-mark {
+      color: var(--butter-deep);
+      font-weight: 700;
     }
 
     .record-footer {
@@ -1335,6 +1468,17 @@
         padding: 0 12px;
       }
 
+      .habit-btn {
+        gap: 4px;
+        padding: 0 3px;
+        font-size: 10.5px;
+      }
+
+      .habit-check {
+        width: 15px;
+        height: 15px;
+      }
+
       .record-item {
         padding: 12px;
       }
@@ -1436,13 +1580,44 @@
           </fieldset>
 
           <fieldset class="field">
-            <legend class="field-label">身体感受</legend>
-            <div class="symptom-options">
-              <button class="symptom-btn" type="button" data-symptom="痛经" aria-pressed="false">痛经</button>
-              <button class="symptom-btn" type="button" data-symptom="头晕" aria-pressed="false">头晕</button>
-              <button class="symptom-btn" type="button" data-symptom="乏力" aria-pressed="false">乏力</button>
-              <button class="symptom-btn" type="button" data-symptom="失眠" aria-pressed="false">失眠</button>
-              <button class="symptom-btn" type="button" data-symptom="食欲差" aria-pressed="false">食欲差</button>
+            <legend class="field-label">今天的小习惯 <span class="field-hint">点一下就好</span></legend>
+            <div class="habit-options">
+              <button class="habit-btn" type="button" data-habit="breakfast" aria-pressed="false">
+                <span class="habit-check" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.1 2.1 4.9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>早餐</span>
+              </button>
+              <button class="habit-btn" type="button" data-habit="nuts" aria-pressed="false">
+                <span class="habit-check" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.1 2.1 4.9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>每日坚果</span>
+              </button>
+              <button class="habit-btn" type="button" data-habit="milk" aria-pressed="false">
+                <span class="habit-check" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.1 2.1 4.9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>牛奶</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label">身体感受 <span class="field-hint">可以多选</span></legend>
+            <div class="sensation-group">
+              <span class="sensation-label"><span class="sensation-dot"></span>有点辛苦</span>
+              <div class="symptom-options">
+                <button class="symptom-btn" type="button" data-symptom="痛经" aria-pressed="false">痛经</button>
+                <button class="symptom-btn" type="button" data-symptom="头晕" aria-pressed="false">头晕</button>
+                <button class="symptom-btn" type="button" data-symptom="乏力" aria-pressed="false">乏力</button>
+                <button class="symptom-btn" type="button" data-symptom="失眠" aria-pressed="false">失眠</button>
+                <button class="symptom-btn" type="button" data-symptom="食欲差" aria-pressed="false">食欲差</button>
+              </div>
+            </div>
+            <div class="sensation-group">
+              <span class="sensation-label positive"><span class="sensation-dot positive"></span>也有舒服的时候</span>
+              <div class="symptom-options">
+                <button class="symptom-btn positive-btn" type="button" data-positive="精神好" aria-pressed="false">精神好</button>
+                <button class="symptom-btn positive-btn" type="button" data-positive="睡得好" aria-pressed="false">睡得好</button>
+                <button class="symptom-btn positive-btn" type="button" data-positive="胃口好" aria-pressed="false">胃口好</button>
+                <button class="symptom-btn positive-btn" type="button" data-positive="身体轻松" aria-pressed="false">身体轻松</button>
+                <button class="symptom-btn positive-btn" type="button" data-positive="皮肤状态好" aria-pressed="false">皮肤状态好</button>
+              </div>
             </div>
           </fieldset>
 
@@ -1612,6 +1787,7 @@
         <span class="record-mood" hidden></span>
       </span>
       <span class="record-symptoms" hidden></span>
+      <span class="record-habits" hidden></span>
       <span class="record-footer">
         <span class="record-message"></span>
         <svg class="record-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1684,7 +1860,11 @@
       form: {
         period: 'none',
         symptoms: new Set(),
+        positives: new Set(),
         mood: '',
+        breakfast: false,
+        nuts: false,
+        milk: false,
       },
     };
 
@@ -1700,7 +1880,9 @@
       nextDayBtn: document.getElementById('nextDayBtn'),
       weightInput: document.getElementById('weightInput'),
       periodBtns: Array.from(document.querySelectorAll('.period-btn')),
-      symptomBtns: Array.from(document.querySelectorAll('.symptom-btn')),
+      habitBtns: Array.from(document.querySelectorAll('.habit-btn')),
+      symptomBtns: Array.from(document.querySelectorAll('.symptom-btn[data-symptom]')),
+      positiveBtns: Array.from(document.querySelectorAll('.positive-btn')),
       moodBtns: Array.from(document.querySelectorAll('.mood-btn')),
       saveBtn: document.getElementById('saveBtn'),
       saveBtnLabel: document.getElementById('saveBtnLabel'),
@@ -1806,7 +1988,11 @@
     function setFormFromRecord(record) {
       state.form.period = record?.period || 'none';
       state.form.symptoms = new Set(parseSymptoms(record?.symptoms || ''));
+      state.form.positives = new Set(parseSymptoms(record?.positives || ''));
       state.form.mood = record?.mood || '';
+      state.form.breakfast = record?.breakfast === 1 || record?.breakfast === true;
+      state.form.nuts = record?.nuts === 1 || record?.nuts === true;
+      state.form.milk = record?.milk === 1 || record?.milk === true;
       els.weightInput.value = record && record.weight !== null && record.weight !== undefined
         ? Number(record.weight).toFixed(1)
         : '';
@@ -1823,8 +2009,16 @@
         const active = button.dataset.period === state.form.period;
         button.setAttribute('aria-pressed', String(active));
       });
+      els.habitBtns.forEach((button) => {
+        const active = state.form[button.dataset.habit] === true;
+        button.setAttribute('aria-pressed', String(active));
+      });
       els.symptomBtns.forEach((button) => {
         const active = state.form.symptoms.has(button.dataset.symptom);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      els.positiveBtns.forEach((button) => {
+        const active = state.form.positives.has(button.dataset.positive);
         button.setAttribute('aria-pressed', String(active));
       });
       els.moodBtns.forEach((button) => {
@@ -2159,14 +2353,46 @@
         }
 
         const symptoms = parseSymptoms(record.symptoms);
+        const positives = parseSymptoms(record.positives);
         const symptomWrap = node.querySelector('.record-symptoms');
-        if (symptoms.length) {
+        if (symptoms.length || positives.length) {
           symptomWrap.hidden = false;
           symptoms.forEach((symptom) => {
             const chip = document.createElement('span');
             chip.className = 'mini-chip';
             chip.textContent = symptom;
             symptomWrap.appendChild(chip);
+          });
+          positives.forEach((positive) => {
+            const chip = document.createElement('span');
+            chip.className = 'mini-chip positive';
+            chip.textContent = positive;
+            symptomWrap.appendChild(chip);
+          });
+        }
+
+        const habitFields = [
+          { key: 'breakfast', label: '早餐' },
+          { key: 'nuts', label: '每日坚果' },
+          { key: 'milk', label: '牛奶' },
+        ];
+        const hasHabitData = habitFields.some(
+          ({ key }) => record[key] !== null && record[key] !== undefined,
+        );
+        if (hasHabitData) {
+          const habitWrap = node.querySelector('.record-habits');
+          habitWrap.hidden = false;
+          habitFields.forEach(({ key, label }) => {
+            const done = record[key] === 1 || record[key] === true;
+            const chip = document.createElement('span');
+            chip.className = `habit-mini${done ? ' is-done' : ''}`;
+            const name = document.createElement('span');
+            name.textContent = label;
+            const mark = document.createElement('span');
+            mark.className = 'habit-mini-mark';
+            mark.textContent = done ? '✓' : '—';
+            chip.append(name, mark);
+            habitWrap.appendChild(chip);
           });
         }
 
@@ -2251,7 +2477,11 @@
         weight,
         period: state.form.period,
         symptoms: Array.from(state.form.symptoms),
+        positives: Array.from(state.form.positives),
         mood: state.form.mood,
+        breakfast: state.form.breakfast,
+        nuts: state.form.nuts,
+        milk: state.form.milk,
         message,
       };
 
@@ -2332,6 +2562,14 @@
       });
     });
 
+    els.habitBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        const habit = button.dataset.habit;
+        state.form[habit] = !state.form[habit];
+        syncFormButtons();
+      });
+    });
+
     els.symptomBtns.forEach((button) => {
       button.addEventListener('click', () => {
         const symptom = button.dataset.symptom;
@@ -2339,6 +2577,18 @@
           state.form.symptoms.delete(symptom);
         } else {
           state.form.symptoms.add(symptom);
+        }
+        syncFormButtons();
+      });
+    });
+
+    els.positiveBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        const positive = button.dataset.positive;
+        if (state.form.positives.has(positive)) {
+          state.form.positives.delete(positive);
+        } else {
+          state.form.positives.add(positive);
         }
         syncFormButtons();
       });

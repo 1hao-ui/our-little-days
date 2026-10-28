@@ -25,7 +25,10 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 
 - 今日打卡：日期可回看过去，未来日期不可选；体重可为空，保留一位小数
 - 月经状态：没来 / 来了·少 / 来了·中 / 来了·多
-- 身体感受：痛经、头晕、乏力、失眠、食欲差，可多选可取消
+- 今天的小习惯：早餐、每日坚果、牛奶，点一下即可记录
+- 身体感受分成「有点辛苦」和「也有舒服的时候」两组，可以同时选择
+  - 有点辛苦：痛经、头晕、乏力、失眠、食欲差
+  - 也有舒服的时候：精神好、睡得好、胃口好、身体轻松、皮肤状态好
 - 心情：好 / 一般 / 累，可选
 - 同一天重复保存会覆盖当天记录，不会新增重复行
 - 保存成功有爱心上浮动画和随机鼓励话
@@ -53,7 +56,8 @@ our-little-days/
 │  └─ icons/              # 小猪主屏幕图标 32/180/192/512
 ├─ assets/                # 小猪图标源图
 ├─ android/               # Android WebView 包装工程
-├─ schema.sql             # D1 表结构
+├─ schema.sql             # D1 表结构（新库）
+├─ migrations/            # 已有数据库的升级 SQL
 ├─ wrangler.jsonc         # Pages 项目、D1 绑定、兼容日期
 ├─ scripts/wrangler.mjs   # 包一层 Wrangler，顺带处理 Windows 临时目录
 ├─ package.json
@@ -286,12 +290,18 @@ CREATE TABLE records (
   symptoms TEXT,
   mood TEXT,
   message TEXT,
+  breakfast INTEGER,
+  nuts INTEGER,
+  milk INTEGER,
+  positives TEXT,
   updated_at TEXT
 );
 ```
 
 - `period`：`none` / `light` / `mid` / `heavy`
-- `symptoms`：逗号分隔的中文标签，例如 `痛经,乏力`
+- `symptoms`：逗号分隔的负面身体感受，例如 `痛经,乏力`
+- `positives`：逗号分隔的正面身体感受，例如 `精神好,睡得好`
+- `breakfast` / `nuts` / `milk`：`1` 表示吃了或喝了，`0` 表示没有；旧记录为 `NULL`
 - `mood`：`good` / `okay` / `tired`，也可以为空
 - `date`：`YYYY-MM-DD`，主键，因此一天只有一条
 - `updated_at`：UTC ISO 时间
@@ -301,10 +311,18 @@ API 会检查日期格式、未来日期、体重范围、固定选项和长度�
 CSV 列固定为：
 
 ```text
-日期,体重,月经状态,身体感受,心情,鼓励话
+日期,体重,月经状态,身体感受,心情,鼓励话,早餐,每日坚果,牛奶,舒服的感受
 ```
 
-文件带 UTF-8 BOM，Excel 直接打开不会乱码；同时做了 CSV 转义和公式注入防护。
+文件带 UTF-8 BOM，Excel 直接打开不会乱码；同时做了 CSV 转义和公式注入防护。旧记录的新增列会留空，不会误写成「没吃」。
+
+已有旧数据库升级时，执行一次：
+
+```powershell
+npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0002_add_habits_and_positives.sql --yes
+```
+
+新数据库直接执行 `npm run db:remote` 即可，`schema.sql` 已经包含新字段。
 
 ---
 

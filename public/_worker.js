@@ -8,6 +8,7 @@
  */
 
 const SYMPTOM_OPTIONS = ['痛经', '头晕', '乏力', '失眠', '食欲差'];
+const POSITIVE_OPTIONS = ['精神好', '睡得好', '胃口好', '身体轻松', '皮肤状态好'];
 const PERIOD_OPTIONS = ['none', 'light', 'mid', 'heavy'];
 const MOOD_OPTIONS = ['good', 'okay', 'tired'];
 const PERIOD_LABELS = {
@@ -124,6 +125,18 @@ function cleanRecordPayload(body) {
   const symptomSet = new Set(rawSymptoms);
   const symptoms = SYMPTOM_OPTIONS.filter((item) => symptomSet.has(item)).join(',');
 
+  const rawPositives = Array.isArray(body.positives) ? body.positives : [];
+  if (rawPositives.some((item) => !POSITIVE_OPTIONS.includes(item))) {
+    return { error: '舒服的感受里有一个选项没有认出来。' };
+  }
+  const positiveSet = new Set(rawPositives);
+  const positives = POSITIVE_OPTIONS.filter((item) => positiveSet.has(item)).join(',');
+
+  const asFlag = (value) => (value === true || value === 1 || value === '1' ? 1 : 0);
+  const breakfast = asFlag(body.breakfast);
+  const nuts = asFlag(body.nuts);
+  const milk = asFlag(body.milk);
+
   const mood = typeof body.mood === 'string' ? body.mood : '';
   if (mood && !MOOD_OPTIONS.includes(mood)) return { error: '心情选项没有认出来。' };
   const message = cleanMessage(body.message);
@@ -136,6 +149,10 @@ function cleanRecordPayload(body) {
       symptoms,
       mood,
       message,
+      breakfast,
+      nuts,
+      milk,
+      positives,
       updated_at: new Date().toISOString(),
     },
   };
@@ -157,7 +174,7 @@ async function readJson(request) {
 
 async function listRecords(env) {
   const { results } = await env.DB.prepare(
-    `SELECT date, weight, period, symptoms, mood, message, updated_at
+    `SELECT date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives, updated_at
      FROM records
      ORDER BY date DESC`,
   ).all();
@@ -173,14 +190,19 @@ async function saveRecord(request, env) {
   const record = cleaned.record;
 
   await env.DB.prepare(
-    `INSERT INTO records (date, weight, period, symptoms, mood, message, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)
+    `INSERT INTO records
+       (date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT(date) DO UPDATE SET
        weight = excluded.weight,
        period = excluded.period,
        symptoms = excluded.symptoms,
        mood = excluded.mood,
        message = excluded.message,
+       breakfast = excluded.breakfast,
+       nuts = excluded.nuts,
+       milk = excluded.milk,
+       positives = excluded.positives,
        updated_at = excluded.updated_at`,
   )
     .bind(
@@ -190,6 +212,10 @@ async function saveRecord(request, env) {
       record.symptoms,
       record.mood,
       record.message,
+      record.breakfast,
+      record.nuts,
+      record.milk,
+      record.positives,
       record.updated_at,
     )
     .run();
@@ -204,14 +230,20 @@ function csvCell(value) {
   return `"${text.replace(/"/g, '""')}"`;
 }
 
+function flagLabel(value) {
+  if (value === 1 || value === true) return '是';
+  if (value === 0 || value === false) return '否';
+  return '';
+}
+
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(
-    `SELECT date, weight, period, symptoms, mood, message
+    `SELECT date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives
      FROM records
      ORDER BY date ASC`,
   ).all();
 
-  const header = ['日期', '体重', '月经状态', '身体感受', '心情', '鼓励话'];
+  const header = ['日期', '体重', '月经状态', '身体感受', '心情', '鼓励话', '早餐', '每日坚果', '牛奶', '舒服的感受'];
   const rows = (results || []).map((record) => [
     record.date,
     record.weight === null || record.weight === undefined
@@ -221,6 +253,10 @@ async function exportCsv(env) {
     record.symptoms || '',
     MOOD_LABELS[record.mood] || '',
     record.message || '',
+    flagLabel(record.breakfast),
+    flagLabel(record.nuts),
+    flagLabel(record.milk),
+    record.positives || '',
   ]);
 
   const csv = `\uFEFF${[header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n')}\r\n`;
