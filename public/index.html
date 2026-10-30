@@ -2161,11 +2161,16 @@
           })()
         : '';
 
-      const labelIndexes = [0, Math.floor((points.length - 1) / 2), points.length - 1].filter((value, index, list) => list.indexOf(value) === index);
-      const xLabels = labelIndexes.map((index) => {
-        const date = parseDateKey(points[index].date);
-        const anchor = index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle';
-        return `<text class="chart-axis-text" x="${coords[index].x.toFixed(1)}" y="${height - 6}" text-anchor="${anchor}">${date.getMonth() + 1}/${date.getDate()}</text>`;
+      // 日期轴按所选时间范围固定分布，不跟着数据点移动，避免日期挤在一起。
+      const labelDates = [
+        start,
+        addDays(start, Math.floor((state.chartRange - 1) / 2)),
+        end,
+      ];
+      const xLabels = labelDates.map((date, index) => {
+        const x = xForDate(formatDateKey(date));
+        const anchor = index === 0 ? 'start' : index === labelDates.length - 1 ? 'end' : 'middle';
+        return `<text class="chart-axis-text" x="${x.toFixed(1)}" y="${height - 6}" text-anchor="${anchor}">${date.getMonth() + 1}/${date.getDate()}</text>`;
       }).join('');
 
       const dots = coords.map((point) => {
