@@ -22,6 +22,11 @@ const MOOD_LABELS = {
   okay: '一般',
   tired: '累',
 };
+const OWNER_OPTIONS = ['panpan', 'zhuzhu'];
+const OWNER_LABELS = {
+  panpan: '潘潘',
+  zhuzhu: '猪猪',
+};
 const APP_TIME_ZONE = 'Asia/Shanghai';
 const ICON_FILES = new Set([
   'pig-cozy-32.png',
@@ -106,6 +111,10 @@ function cleanRecordPayload(body) {
   if (date > today) return { error: '未来的日子还没到呢，先记今天吧。' };
   if (date < '2000-01-01') return { error: '日期好像太早啦。' };
 
+  const owner = typeof body.owner === 'string' ? body.owner : 'panpan';
+  if (!OWNER_OPTIONS.includes(owner)) return { error: '记录人没有认出来，再试一次吧。' };
+  const isZhuzhu = owner === 'zhuzhu';
+
   let weight = null;
   if (body.weight !== null && body.weight !== undefined && body.weight !== '') {
     const parsed = typeof body.weight === 'number' ? body.weight : Number(body.weight);
@@ -115,8 +124,12 @@ function cleanRecordPayload(body) {
     weight = Math.round(parsed * 10) / 10;
   }
 
-  const period = typeof body.period === 'string' ? body.period : 'none';
-  if (!PERIOD_OPTIONS.includes(period)) return { error: '月经状态没有选对，再试一次吧。' };
+  let period = typeof body.period === 'string' ? body.period : 'none';
+  if (isZhuzhu) {
+    period = 'none';
+  } else if (!PERIOD_OPTIONS.includes(period)) {
+    return { error: '月经状态没有选对，再试一次吧。' };
+  }
 
   const rawSymptoms = Array.isArray(body.symptoms) ? body.symptoms : [];
   if (rawSymptoms.some((item) => !SYMPTOM_OPTIONS.includes(item))) {
@@ -133,9 +146,11 @@ function cleanRecordPayload(body) {
   const positives = POSITIVE_OPTIONS.filter((item) => positiveSet.has(item)).join(',');
 
   const asFlag = (value) => (value === true || value === 1 || value === '1' ? 1 : 0);
-  const breakfast = asFlag(body.breakfast);
-  const nuts = asFlag(body.nuts);
-  const milk = asFlag(body.milk);
+  const breakfast = isZhuzhu ? null : asFlag(body.breakfast);
+  const nuts = isZhuzhu ? null : asFlag(body.nuts);
+  const milk = isZhuzhu ? null : asFlag(body.milk);
+  const muscle = isZhuzhu ? asFlag(body.muscle) : null;
+  const cut = isZhuzhu ? asFlag(body.cut) : null;
 
   const mood = typeof body.mood === 'string' ? body.mood : '';
   if (mood && !MOOD_OPTIONS.includes(mood)) return { error: '心情选项没有认出来。' };
@@ -144,6 +159,7 @@ function cleanRecordPayload(body) {
   return {
     record: {
       date,
+      owner,
       weight,
       period,
       symptoms,
@@ -152,6 +168,8 @@ function cleanRecordPayload(body) {
       breakfast,
       nuts,
       milk,
+      muscle,
+      cut,
       positives,
       updated_at: new Date().toISOString(),
     },
@@ -174,9 +192,10 @@ async function readJson(request) {
 
 async function listRecords(env) {
   const { results } = await env.DB.prepare(
-    `SELECT date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives, updated_at
+    `SELECT date, owner, weight, period, symptoms, mood, message,
+            breakfast, nuts, milk, positives, muscle, cut, updated_at
      FROM records
-     ORDER BY date DESC`,
+     ORDER BY date DESC, owner ASC`,
   ).all();
   return results || [];
 }
@@ -191,9 +210,10 @@ async function saveRecord(request, env) {
 
   await env.DB.prepare(
     `INSERT INTO records
-       (date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-     ON CONFLICT(date) DO UPDATE SET
+       (date, owner, weight, period, symptoms, mood, message,
+        breakfast, nuts, milk, positives, muscle, cut, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(date, owner) DO UPDATE SET
        weight = excluded.weight,
        period = excluded.period,
        symptoms = excluded.symptoms,
@@ -203,10 +223,13 @@ async function saveRecord(request, env) {
        nuts = excluded.nuts,
        milk = excluded.milk,
        positives = excluded.positives,
+       muscle = excluded.muscle,
+       cut = excluded.cut,
        updated_at = excluded.updated_at`,
   )
     .bind(
       record.date,
+      record.owner,
       record.weight,
       record.period,
       record.symptoms,
@@ -216,6 +239,8 @@ async function saveRecord(request, env) {
       record.nuts,
       record.milk,
       record.positives,
+      record.muscle,
+      record.cut,
       record.updated_at,
     )
     .run();
@@ -238,26 +263,37 @@ function flagLabel(value) {
 
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(
-    `SELECT date, weight, period, symptoms, mood, message, breakfast, nuts, milk, positives
+    `SELECT date, owner, weight, period, symptoms, mood, message,
+            breakfast, nuts, milk, positives, muscle, cut
      FROM records
-     ORDER BY date ASC`,
+     ORDER BY date ASC, owner ASC`,
   ).all();
 
-  const header = ['日期', '体重', '月经状态', '身体感受', '心情', '鼓励话', '早餐', '每日坚果', '牛奶', '舒服的感受'];
-  const rows = (results || []).map((record) => [
-    record.date,
-    record.weight === null || record.weight === undefined
-      ? ''
-      : Number(record.weight).toFixed(1),
-    PERIOD_LABELS[record.period] || '没来',
-    record.symptoms || '',
-    MOOD_LABELS[record.mood] || '',
-    record.message || '',
-    flagLabel(record.breakfast),
-    flagLabel(record.nuts),
-    flagLabel(record.milk),
-    record.positives || '',
-  ]);
+  const header = [
+    '日期', '记录人', '体重', '月经状态', '身体感受', '心情', '鼓励话',
+    '早餐', '每日坚果', '牛奶', '增肌', '减脂', '舒服的感受',
+  ];
+  const rows = (results || []).map((record) => {
+    const isPanpan = record.owner === 'panpan';
+    const isZhuzhu = record.owner === 'zhuzhu';
+    return [
+      record.date,
+      OWNER_LABELS[record.owner] || '',
+      record.weight === null || record.weight === undefined
+        ? ''
+        : Number(record.weight).toFixed(1),
+      isPanpan ? PERIOD_LABELS[record.period] || '没来' : '',
+      record.symptoms || '',
+      MOOD_LABELS[record.mood] || '',
+      record.message || '',
+      isPanpan ? flagLabel(record.breakfast) : '',
+      isPanpan ? flagLabel(record.nuts) : '',
+      isPanpan ? flagLabel(record.milk) : '',
+      isZhuzhu ? flagLabel(record.muscle) : '',
+      isZhuzhu ? flagLabel(record.cut) : '',
+      record.positives || '',
+    ];
+  });
 
   const csv = `\uFEFF${[header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n')}\r\n`;
   const filename = `our-little-days-${todayInAppTimeZone()}.csv`;

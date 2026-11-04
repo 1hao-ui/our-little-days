@@ -1,6 +1,7 @@
 -- 本地初始化 / 远程初始化共用这一份结构。
 CREATE TABLE IF NOT EXISTS records (
-  date TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  owner TEXT NOT NULL,
   weight REAL,
   period TEXT,
   symptoms TEXT,
@@ -10,8 +11,11 @@ CREATE TABLE IF NOT EXISTS records (
   nuts INTEGER,
   milk INTEGER,
   positives TEXT,
-  updated_at TEXT
+  muscle INTEGER,
+  cut INTEGER,
+  updated_at TEXT,
+  PRIMARY KEY (date, owner)
 );
 
-CREATE INDEX IF NOT EXISTS idx_records_date_desc
-  ON records (date DESC);
+CREATE INDEX IF NOT EXISTS idx_records_owner_date
+  ON records (owner, date DESC);

@@ -26,6 +26,10 @@
       --butter: #FBF0DA;
       --butter-line: #EED9B4;
       --butter-deep: #9A6F3E;
+      --mist: #B9D6E2;
+      --mist-soft: #EAF4F8;
+      --mist-line: #CFE3EB;
+      --mist-deep: #6F97A8;
       --line: #F1E4DD;
       --text: #5A4F4C;
       --muted: #9B8A83;
@@ -139,12 +143,37 @@
       line-height: 1.6;
     }
 
+    .hero-art {
+      position: relative;
+      display: flex;
+      flex: none;
+      width: 88px;
+      height: 86px;
+      justify-content: flex-end;
+    }
+
     .hero-pig {
       flex: none;
       width: 76px;
       height: auto;
       margin: -2px 1px 0 0;
       transform: rotate(4deg);
+    }
+
+    .hero-dumbbell {
+      position: absolute;
+      right: -3px;
+      bottom: 1px;
+      display: block;
+      width: 38px;
+      height: 38px;
+      color: var(--mist-deep);
+      transform: rotate(-12deg);
+    }
+
+    .hero-dumbbell svg {
+      width: 100%;
+      height: 100%;
     }
 
     .card {
@@ -178,6 +207,59 @@
       font-weight: 720;
       letter-spacing: -.015em;
       line-height: 1.4;
+    }
+
+    .profile-switch {
+      display: flex;
+      width: max-content;
+      gap: 4px;
+      margin-bottom: 14px;
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+    }
+
+    .profile-tab {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      gap: 6px;
+      padding: 0 15px;
+      border-radius: var(--radius-pill);
+      color: #A18E87;
+      font-size: 12px;
+      transition: background .2s var(--ease), color .2s var(--ease),
+        transform .2s var(--ease);
+    }
+
+    .profile-tab:active {
+      transform: scale(.97);
+    }
+
+    .profile-tab[aria-pressed="true"][data-profile="panpan"] {
+      background: var(--pink-soft);
+      color: #865256;
+      font-weight: 700;
+    }
+
+    .profile-tab[aria-pressed="true"][data-profile="zhuzhu"] {
+      background: var(--mist-soft);
+      color: #557685;
+      font-weight: 700;
+    }
+
+    .profile-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .profile-dot.panpan {
+      background: var(--pink);
+    }
+
+    .profile-dot.zhuzhu {
+      background: var(--mist);
     }
 
     .soft-badge,
@@ -484,6 +566,60 @@
       color: #FFFDFC;
     }
 
+    .training-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .training-btn {
+      display: flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 10px;
+      border: 1px solid #E7E3DF;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: #7D8D93;
+      font-size: 12.5px;
+      transition: background .2s var(--ease), border-color .2s var(--ease),
+        color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .training-btn:hover {
+      border-color: var(--mist-line);
+      background: #F6FBFD;
+    }
+
+    .training-btn:active {
+      transform: scale(.97);
+    }
+
+    .training-btn[aria-pressed="true"] {
+      border-color: var(--mist-line);
+      background: var(--mist-soft);
+      color: #4F6E7C;
+      font-weight: 650;
+    }
+
+    .training-btn[aria-pressed="true"] .habit-check {
+      border-color: #8FB7C7;
+      background: #8FB7C7;
+      color: #FFFDFC;
+    }
+
+    .inline-dumbbell {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 4px;
+      color: var(--mist-deep);
+      vertical-align: -2px;
+    }
+
     .sensation-group + .sensation-group {
       margin-top: 12px;
     }
@@ -633,6 +769,10 @@
       color: #714144;
     }
 
+    .save-icon-dumbbell {
+      display: none;
+    }
+
     .save-button:hover {
       filter: brightness(1.015) saturate(1.035);
     }
@@ -669,6 +809,18 @@
       opacity: 0;
       will-change: transform, opacity;
       animation: heart-rise 1.05s var(--ease) forwards;
+    }
+
+    .floating-dumbbell {
+      position: absolute;
+      bottom: 31px;
+      left: 50%;
+      width: 34px;
+      height: 34px;
+      color: var(--mist-deep);
+      opacity: 0;
+      will-change: transform, opacity;
+      animation: dumbbell-rise 1.05s var(--ease) forwards;
     }
 
     .save-feedback {
@@ -1429,6 +1581,23 @@
       }
     }
 
+    @keyframes dumbbell-rise {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 8px) scale(.55) rotate(-20deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -72px) scale(1.02) rotate(18deg);
+      }
+    }
+
     @keyframes soft-pulse {
       0%,
       100% {
@@ -1439,6 +1608,115 @@
         opacity: 1;
         transform: scale(1);
       }
+    }
+
+    .page.is-zhuzhu .eyebrow {
+      color: #7FA4B4;
+    }
+
+    .page.is-zhuzhu .icon-button:not(:disabled):hover {
+      background: var(--mist-soft);
+      color: var(--mist-deep);
+    }
+
+    .page.is-zhuzhu .date-pick:focus-within {
+      background: #F3FAFC;
+      box-shadow: inset 0 0 0 1.5px #C7E0EA;
+    }
+
+    .page.is-zhuzhu .weight-box:focus-within {
+      border-color: #BDD9E4;
+      background: #FBFEFF;
+    }
+
+    .page.is-zhuzhu .save-button {
+      background: #BFD9E4;
+      color: #3D5864;
+    }
+
+    .page.is-zhuzhu .save-button svg {
+      color: #567686;
+    }
+
+    .page.is-zhuzhu .save-icon-heart {
+      display: none;
+    }
+
+    .page.is-zhuzhu .save-icon-dumbbell {
+      display: block;
+    }
+
+    .page.is-zhuzhu .save-feedback {
+      background: #EFF7FA;
+    }
+
+    .page.is-zhuzhu .feedback-heart {
+      color: #8FB7C7;
+    }
+
+    .page.is-zhuzhu .feedback-label {
+      color: #7F9FAC;
+    }
+
+    .page.is-zhuzhu .range-btn[aria-pressed="true"] {
+      background: var(--mist-soft);
+      color: #547382;
+    }
+
+    .page.is-zhuzhu .latest-pill {
+      background: #F3FAFC;
+      color: #68828C;
+    }
+
+    .page.is-zhuzhu .record-item {
+      background: #F8FBFC;
+    }
+
+    .page.is-zhuzhu .record-item:hover {
+      background: #F1F8FB;
+    }
+
+    .page.is-zhuzhu .record-date {
+      background: #E7F3F8;
+      color: #567482;
+    }
+
+    .page.is-zhuzhu .count-pill,
+    .page.is-zhuzhu .soft-badge {
+      background: #EFF8FB;
+      color: #5A7987;
+    }
+
+    .page.is-zhuzhu .chart-line {
+      stroke: #8EB7C8;
+    }
+
+    .page.is-zhuzhu .chart-dot {
+      fill: #8EB7C8;
+    }
+
+    .page.is-zhuzhu .chart-area {
+      fill: #EAF4F8;
+      opacity: .78;
+    }
+
+    .page.is-zhuzhu .habit-mini.is-done {
+      background: var(--mist-soft);
+      color: #547382;
+    }
+
+    .page.is-zhuzhu .habit-mini.is-done .habit-mini-mark {
+      color: var(--mist-deep);
+    }
+
+    .page.is-zhuzhu .export-button {
+      border-color: #D7E8EF;
+      background: #F1F9FC;
+      color: #567582;
+    }
+
+    .page.is-zhuzhu .export-button:hover {
+      background: #EAF6FA;
     }
 
     @media (max-width: 360px) {
@@ -1456,8 +1734,20 @@
         padding-left: 2px;
       }
 
+      .hero-art {
+        width: 74px;
+        height: 72px;
+      }
+
       .hero-pig {
         width: 62px;
+      }
+
+      .hero-dumbbell {
+        right: -5px;
+        bottom: -2px;
+        width: 32px;
+        height: 32px;
       }
 
       .period-btn {
@@ -1507,31 +1797,47 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="page" id="page">
     <header class="hero">
       <div class="hero-copy">
         <p class="eyebrow">两个人的小本子</p>
         <h1>我们的小日子</h1>
-        <p class="hero-subtitle">每天一点点，把日子轻轻记下来。</p>
+        <p class="hero-subtitle" id="heroSubtitle">每天一点点，把日子轻轻记下来。</p>
       </div>
-      <svg class="hero-pig" viewBox="0 0 80 80" role="img" aria-label="一只可爱的粉色小猪贴纸">
-        <path d="M20.5 31.5c-2.7-8.1 1.2-13 8.3-10.6l7.5 5.2-9.5 9.9-6.3-4.5Z" fill="#F2B4AE"/>
-        <path d="M59.5 31.5c2.7-8.1-1.2-13-8.3-10.6l-7.5 5.2 9.5 9.9 6.3-4.5Z" fill="#F2B4AE"/>
-        <ellipse cx="40" cy="45" rx="24.5" ry="21.5" fill="#F8D2CC"/>
-        <circle cx="19" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
-        <circle cx="61" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
-        <ellipse cx="40" cy="50" rx="13.5" ry="9.5" fill="#F4B5AF"/>
-        <ellipse cx="35.7" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
-        <ellipse cx="44.3" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
-        <circle cx="29.5" cy="40.5" r="2" fill="#6F5751"/>
-        <circle cx="50.5" cy="40.5" r="2" fill="#6F5751"/>
-        <path d="M17.5 59.5c-1.6 1-3.3.3-3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-        <path d="M62.5 59.5c1.6 1 3.3.3 3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-      </svg>
+      <div class="hero-art">
+        <svg class="hero-pig" viewBox="0 0 80 80" role="img" aria-label="一只可爱的粉色小猪贴纸">
+          <path d="M20.5 31.5c-2.7-8.1 1.2-13 8.3-10.6l7.5 5.2-9.5 9.9-6.3-4.5Z" fill="#F2B4AE"/>
+          <path d="M59.5 31.5c2.7-8.1-1.2-13-8.3-10.6l-7.5 5.2 9.5 9.9 6.3-4.5Z" fill="#F2B4AE"/>
+          <ellipse cx="40" cy="45" rx="24.5" ry="21.5" fill="#F8D2CC"/>
+          <circle cx="19" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
+          <circle cx="61" cy="49" r="3" fill="#F7C0BA" opacity=".72"/>
+          <ellipse cx="40" cy="50" rx="13.5" ry="9.5" fill="#F4B5AF"/>
+          <ellipse cx="35.7" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
+          <ellipse cx="44.3" cy="50" rx="1.5" ry="2.2" fill="#A76F6F"/>
+          <circle cx="29.5" cy="40.5" r="2" fill="#6F5751"/>
+          <circle cx="50.5" cy="40.5" r="2" fill="#6F5751"/>
+          <path d="M17.5 59.5c-1.6 1-3.3.3-3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <path d="M62.5 59.5c1.6 1 3.3.3 3.6-1.3" stroke="#E6A6A0" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="hero-dumbbell" id="heroDumbbell" aria-hidden="true" hidden>
+          <svg viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="19" fill="#FFF9F5" opacity=".94"/>
+            <g transform="rotate(-18 20 20)">
+              <rect x="8" y="18" width="24" height="4" rx="2" fill="#9DBECA"/>
+              <rect x="4" y="11" width="8" height="18" rx="4" fill="#BBD9E4" stroke="#7FA6B6" stroke-width="1.2"/>
+              <rect x="28" y="11" width="8" height="18" rx="4" fill="#BBD9E4" stroke="#7FA6B6" stroke-width="1.2"/>
+            </g>
+          </svg>
+        </span>
+      </div>
     </header>
 
     <main>
       <section class="card checkin-card" id="checkin" aria-labelledby="formTitle">
+        <div class="profile-switch" role="group" aria-label="选择记录人">
+          <button class="profile-tab" type="button" data-profile="panpan" aria-pressed="true"><span class="profile-dot panpan"></span>潘潘</button>
+          <button class="profile-tab" type="button" data-profile="zhuzhu" aria-pressed="false"><span class="profile-dot zhuzhu"></span>猪猪</button>
+        </div>
         <div class="section-head">
           <div>
             <p class="eyebrow" id="formEyebrow">今天</p>
@@ -1569,7 +1875,7 @@
             </div>
           </div>
 
-          <fieldset class="field">
+          <fieldset class="field profile-panpan-only" id="periodField">
             <legend class="field-label">月经状态</legend>
             <div class="period-options">
               <button class="period-btn" type="button" data-period="none" aria-pressed="true">没来</button>
@@ -1579,7 +1885,7 @@
             </div>
           </fieldset>
 
-          <fieldset class="field">
+          <fieldset class="field profile-panpan-only" id="habitField">
             <legend class="field-label">今天的小习惯 <span class="field-hint">点一下就好</span></legend>
             <div class="habit-options">
               <button class="habit-btn" type="button" data-habit="breakfast" aria-pressed="false">
@@ -1597,12 +1903,29 @@
             </div>
           </fieldset>
 
+          <fieldset class="field profile-zhuzhu-only" id="trainingField" hidden>
+            <legend class="field-label">
+              <svg class="inline-dumbbell" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="4.5" height="8" rx="2.2" fill="currentColor"/><rect x="17" y="8" width="4.5" height="8" rx="2.2" fill="currentColor"/><rect x="7" y="10.5" width="10" height="3" rx="1.5" fill="currentColor"/></svg>
+              今天练什么 <span class="field-hint">可多选</span>
+            </legend>
+            <div class="training-options">
+              <button class="training-btn" type="button" data-training="muscle" aria-pressed="false">
+                <span class="habit-check" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.1 2.1 4.9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>增肌</span>
+              </button>
+              <button class="training-btn" type="button" data-training="cut" aria-pressed="false">
+                <span class="habit-check" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.1 2.1 4.9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>减脂</span>
+              </button>
+            </div>
+          </fieldset>
+
           <fieldset class="field">
             <legend class="field-label">身体感受 <span class="field-hint">可以多选</span></legend>
             <div class="sensation-group">
               <span class="sensation-label"><span class="sensation-dot"></span>有点辛苦</span>
               <div class="symptom-options">
-                <button class="symptom-btn" type="button" data-symptom="痛经" aria-pressed="false">痛经</button>
+                <button class="symptom-btn profile-panpan-only" type="button" data-symptom="痛经" aria-pressed="false">痛经</button>
                 <button class="symptom-btn" type="button" data-symptom="头晕" aria-pressed="false">头晕</button>
                 <button class="symptom-btn" type="button" data-symptom="乏力" aria-pressed="false">乏力</button>
                 <button class="symptom-btn" type="button" data-symptom="失眠" aria-pressed="false">失眠</button>
@@ -1655,7 +1978,8 @@
 
           <div class="save-zone">
             <button class="save-button" id="saveBtn" type="submit">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/></svg>
+              <svg class="save-icon-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/></svg>
+              <svg class="save-icon-dumbbell" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="4.5" height="8" rx="2.2" fill="currentColor"/><rect x="17" y="8" width="4.5" height="8" rx="2.2" fill="currentColor"/><rect x="7" y="10.5" width="10" height="3" rx="1.5" fill="currentColor"/></svg>
               <span id="saveBtnLabel">记下这一天</span>
             </button>
             <div class="save-burst" id="saveBurst" aria-hidden="true"></div>
@@ -1696,7 +2020,7 @@
         <p class="gentle-line">慢慢来，不着急</p>
       </section>
 
-      <section class="card calendar-card" aria-labelledby="calendarTitle">
+      <section class="card calendar-card profile-panpan-only" id="calendarSection" aria-labelledby="calendarTitle">
         <div class="section-head">
           <div>
             <p class="eyebrow">一月一月</p>
@@ -1759,7 +2083,7 @@
 
       <section class="card export-card" aria-labelledby="exportTitle">
         <h2 id="exportTitle">把记录带走</h2>
-        <p class="export-copy">全部记录会整理成一个 CSV 文件，用 Excel 打开也不会乱码。</p>
+        <p class="export-copy">两个人的记录会整理成一个 CSV 文件，用「记录人」区分，用 Excel 打开也不会乱码。</p>
         <a class="export-button" id="exportBtn" href="#" download>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           导出全部记录
@@ -1836,6 +2160,17 @@
     };
     const WEEKDAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     const WEEKDAY_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
+    const PROFILE_LABELS = { panpan: '潘潘', zhuzhu: '猪猪' };
+    const PROFILE_STORAGE_KEY = 'our-little-days-profile';
+
+    function readStoredProfile() {
+      try {
+        const saved = window.localStorage.getItem(PROFILE_STORAGE_KEY);
+        return saved === 'zhuzhu' ? 'zhuzhu' : 'panpan';
+      } catch {
+        return 'panpan';
+      }
+    }
 
     const token = decodeURIComponent((window.location.pathname.split('/').filter(Boolean)[0] || ''));
     const API_BASE = `/${encodeURIComponent(token)}/api`;
@@ -1850,6 +2185,7 @@
 
     const state = {
       records: new Map(),
+      profile: readStoredProfile(),
       selectedDate: todayKey,
       chartRange: 30,
       calendarMonth: new Date(todayDate.getFullYear(), todayDate.getMonth(), 1),
@@ -1865,10 +2201,16 @@
         breakfast: false,
         nuts: false,
         milk: false,
+        muscle: false,
+        cut: false,
       },
     };
 
     const els = {
+      page: document.getElementById('page'),
+      heroSubtitle: document.getElementById('heroSubtitle'),
+      heroDumbbell: document.getElementById('heroDumbbell'),
+      profileTabs: Array.from(document.querySelectorAll('.profile-tab')),
       form: document.getElementById('entryForm'),
       formEyebrow: document.getElementById('formEyebrow'),
       formTitle: document.getElementById('formTitle'),
@@ -1881,6 +2223,7 @@
       weightInput: document.getElementById('weightInput'),
       periodBtns: Array.from(document.querySelectorAll('.period-btn')),
       habitBtns: Array.from(document.querySelectorAll('.habit-btn')),
+      trainingBtns: Array.from(document.querySelectorAll('.training-btn')),
       symptomBtns: Array.from(document.querySelectorAll('.symptom-btn[data-symptom]')),
       positiveBtns: Array.from(document.querySelectorAll('.positive-btn')),
       moodBtns: Array.from(document.querySelectorAll('.mood-btn')),
@@ -1903,6 +2246,7 @@
       lastPeriodValue: document.getElementById('lastPeriodValue'),
       averageCycleValue: document.getElementById('averageCycleValue'),
       cycleTags: document.getElementById('cycleTags'),
+      recordsTitle: document.getElementById('recordsTitle'),
       recordsList: document.getElementById('recordsList'),
       recordsHint: document.getElementById('recordsHint'),
       recordCount: document.getElementById('recordCount'),
@@ -1960,16 +2304,62 @@
       }, 2800);
     }
 
-    function getRecord(dateKey) {
-      return state.records.get(dateKey) || null;
+    function recordKey(owner, dateKey) {
+      return `${owner}|${dateKey}`;
+    }
+
+    function getRecord(dateKey, owner = state.profile) {
+      return state.records.get(recordKey(owner, dateKey)) || null;
+    }
+
+    function recordsFor(owner) {
+      return Array.from(state.records.values()).filter((record) => record.owner === owner);
     }
 
     function parseSymptoms(raw) {
       return typeof raw === 'string' && raw ? raw.split(',').filter(Boolean) : [];
     }
 
+    function isZhuzhu() {
+      return state.profile === 'zhuzhu';
+    }
+
+    function applyProfileUI() {
+      const zhuzhu = isZhuzhu();
+      els.page.classList.toggle('is-zhuzhu', zhuzhu);
+      els.heroSubtitle.textContent = zhuzhu
+        ? '慢慢练，也是在好好照顾自己。'
+        : '每天一点点，把日子轻轻记下来。';
+      els.heroDumbbell.hidden = !zhuzhu;
+      els.profileTabs.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.profile === state.profile));
+      });
+      document.querySelectorAll('.profile-panpan-only').forEach((element) => {
+        element.hidden = zhuzhu;
+      });
+      document.querySelectorAll('.profile-zhuzhu-only').forEach((element) => {
+        element.hidden = !zhuzhu;
+      });
+      els.recordsTitle.textContent = zhuzhu ? '猪猪的训练记录' : '潘潘的记录';
+      document.title = zhuzhu ? '猪猪的训练日常 · 我们的小日子' : '我们的小日子';
+    }
+
+    function setProfile(profile) {
+      if (!Object.prototype.hasOwnProperty.call(PROFILE_LABELS, profile) || state.saving) return;
+      state.profile = profile;
+      try {
+        window.localStorage.setItem(PROFILE_STORAGE_KEY, profile);
+      } catch {
+        // 本地存储不可用时，本次会话内仍然可以切换。
+      }
+      applyProfileUI();
+      setFormFromRecord(getRecord(state.selectedDate));
+      renderAll();
+    }
+
     function updateDateView() {
       const isToday = state.selectedDate === todayKey;
+      const zhuzhu = isZhuzhu();
       const date = parseDateKey(state.selectedDate);
       const yearPart = date.getFullYear() !== todayDate.getFullYear() ? `${date.getFullYear()}年` : '';
       els.dateMain.textContent = `${yearPart}${date.getMonth() + 1}月${date.getDate()}日 ${WEEKDAYS[date.getDay()]}`;
@@ -1980,19 +2370,26 @@
       els.prevDayBtn.disabled = state.selectedDate <= '2000-01-01';
       els.pastBadge.hidden = isToday;
       els.formEyebrow.textContent = isToday ? '今天' : '慢慢补上';
-      els.formTitle.textContent = isToday ? '今天的小记录' : '补记这一天';
+      els.formTitle.textContent = isToday
+        ? (zhuzhu ? '今天的小训练' : '今天的小记录')
+        : (zhuzhu ? '补记这次训练' : '补记这一天');
       const record = getRecord(state.selectedDate);
-      els.saveBtnLabel.textContent = record ? '更新这一天' : '记下这一天';
+      els.saveBtnLabel.textContent = record
+        ? (zhuzhu ? '更新这次训练' : '更新这一天')
+        : (zhuzhu ? '记下这次训练' : '记下这一天');
     }
 
     function setFormFromRecord(record) {
       state.form.period = record?.period || 'none';
       state.form.symptoms = new Set(parseSymptoms(record?.symptoms || ''));
+      if (isZhuzhu()) state.form.symptoms.delete('痛经');
       state.form.positives = new Set(parseSymptoms(record?.positives || ''));
       state.form.mood = record?.mood || '';
       state.form.breakfast = record?.breakfast === 1 || record?.breakfast === true;
       state.form.nuts = record?.nuts === 1 || record?.nuts === true;
       state.form.milk = record?.milk === 1 || record?.milk === true;
+      state.form.muscle = record?.muscle === 1 || record?.muscle === true;
+      state.form.cut = record?.cut === 1 || record?.cut === true;
       els.weightInput.value = record && record.weight !== null && record.weight !== undefined
         ? Number(record.weight).toFixed(1)
         : '';
@@ -2011,6 +2408,10 @@
       });
       els.habitBtns.forEach((button) => {
         const active = state.form[button.dataset.habit] === true;
+        button.setAttribute('aria-pressed', String(active));
+      });
+      els.trainingBtns.forEach((button) => {
+        const active = state.form[button.dataset.training] === true;
         button.setAttribute('aria-pressed', String(active));
       });
       els.symptomBtns.forEach((button) => {
@@ -2050,7 +2451,7 @@
       const end = todayDate;
       const start = addDays(end, -(state.chartRange - 1));
       const startKey = formatDateKey(start);
-      const points = Array.from(state.records.values())
+      const points = recordsFor(state.profile)
         .filter((record) => record.weight !== null && record.weight !== undefined)
         .filter((record) => record.date >= startKey && record.date <= todayKey)
         .sort((a, b) => a.date.localeCompare(b.date))
@@ -2059,7 +2460,7 @@
           weight: Number(record.weight),
         }));
 
-      const allWeightRecords = Array.from(state.records.values())
+      const allWeightRecords = recordsFor(state.profile)
         .filter((record) => record.weight !== null && record.weight !== undefined)
         .sort((a, b) => b.date.localeCompare(a.date));
       if (allWeightRecords.length) {
@@ -2181,7 +2582,7 @@
 
       els.chart.setAttribute(
         'aria-label',
-        `最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。`,
+        `${PROFILE_LABELS[state.profile]}最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。`,
       );
       els.chart.innerHTML = `
         <title>最近 ${state.chartRange} 天体重趋势</title>
@@ -2245,7 +2646,7 @@
     }
 
     function renderCycles() {
-      const periodDays = Array.from(state.records.values())
+      const periodDays = recordsFor('panpan')
         .filter((record) => record.period && record.period !== 'none')
         .map((record) => record.date)
         .sort();
@@ -2302,9 +2703,10 @@
     }
 
     function renderRecords() {
+      const activeRecords = recordsFor(state.profile);
       els.loadError.hidden = !state.loadFailed;
-      els.recordCount.hidden = !state.loaded || state.records.size === 0;
-      els.recordCount.textContent = `${state.records.size} 天`;
+      els.recordCount.hidden = !state.loaded || activeRecords.length === 0;
+      els.recordCount.textContent = `${activeRecords.length} 天`;
 
       if (state.loading) {
         els.recordsList.innerHTML = '<div class="records-loading"><span class="loading-dot"></span>正在轻轻翻页…</div>';
@@ -2318,7 +2720,7 @@
         return;
       }
 
-      const records = Array.from(state.records.values()).sort((a, b) => b.date.localeCompare(a.date));
+      const records = activeRecords.sort((a, b) => b.date.localeCompare(a.date));
       if (!records.length) {
         const empty = document.createElement('div');
         empty.className = 'records-empty';
@@ -2349,12 +2751,20 @@
           node.querySelector('.record-weight').classList.add('is-empty');
         }
 
-        node.querySelector('.record-period-label').textContent = PERIOD_LABELS[record.period] || PERIOD_LABELS.none;
-        node.querySelector('.period-dot').classList.add(record.period || 'none');
+        const periodNode = node.querySelector('.record-period');
+        if (state.profile === 'zhuzhu') {
+          periodNode.hidden = true;
+        } else {
+          node.querySelector('.record-period-label').textContent = PERIOD_LABELS[record.period] || PERIOD_LABELS.none;
+          node.querySelector('.period-dot').classList.add(record.period || 'none');
+        }
         const moodNode = node.querySelector('.record-mood');
         if (record.mood && MOOD_LABELS[record.mood]) {
           moodNode.hidden = false;
           moodNode.textContent = `心情 ${MOOD_LABELS[record.mood]}`;
+        }
+        if (state.profile === 'zhuzhu' && moodNode.hidden) {
+          node.querySelector('.record-meta').hidden = true;
         }
 
         const symptoms = parseSymptoms(record.symptoms);
@@ -2376,11 +2786,16 @@
           });
         }
 
-        const habitFields = [
-          { key: 'breakfast', label: '早餐' },
-          { key: 'nuts', label: '每日坚果' },
-          { key: 'milk', label: '牛奶' },
-        ];
+        const habitFields = state.profile === 'zhuzhu'
+          ? [
+              { key: 'muscle', label: '增肌' },
+              { key: 'cut', label: '减脂' },
+            ]
+          : [
+              { key: 'breakfast', label: '早餐' },
+              { key: 'nuts', label: '每日坚果' },
+              { key: 'milk', label: '牛奶' },
+            ];
         const hasHabitData = habitFields.some(
           ({ key }) => record[key] !== null && record[key] !== undefined,
         );
@@ -2439,24 +2854,30 @@
       return candidate || ENCOURAGEMENTS[0];
     }
 
-    function playHeart() {
-      const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      heart.setAttribute('viewBox', '0 0 24 24');
-      heart.setAttribute('class', 'floating-heart');
-      heart.setAttribute('aria-hidden', 'true');
-      heart.innerHTML = '<path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/>';
-      els.saveBurst.appendChild(heart);
-      heart.addEventListener('animationend', () => heart.remove(), { once: true });
-      window.setTimeout(() => heart.remove(), 1400);
+    function playSaveAnimation() {
+      const dumbbell = isZhuzhu();
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', dumbbell ? '0 0 40 40' : '0 0 24 24');
+      icon.setAttribute('class', dumbbell ? 'floating-dumbbell' : 'floating-heart');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = dumbbell
+        ? '<g transform="rotate(-18 20 20)"><rect x="8" y="18" width="24" height="4" rx="2" fill="currentColor" opacity=".6"/><rect x="4" y="10" width="8" height="20" rx="4" fill="currentColor"/><rect x="28" y="10" width="8" height="20" rx="4" fill="currentColor"/></g>'
+        : '<path d="M12 20.2S4.9 15.6 3 11.1C1.6 7.6 3.7 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.3 0 5.4 3.1 4 6.6-1.9 4.5-9 9.1-9 9.1Z" fill="currentColor"/>';
+      els.saveBurst.appendChild(icon);
+      icon.addEventListener('animationend', () => icon.remove(), { once: true });
+      window.setTimeout(() => icon.remove(), 1400);
     }
 
     function setSaving(saving) {
       state.saving = saving;
       els.saveBtn.disabled = saving;
       els.saveBtn.classList.toggle('is-busy', saving);
+      const record = getRecord(state.selectedDate);
       els.saveBtnLabel.textContent = saving
         ? '正在轻轻记下…'
-        : (getRecord(state.selectedDate) ? '更新这一天' : '记下这一天');
+        : record
+          ? (isZhuzhu() ? '更新这次训练' : '更新这一天')
+          : (isZhuzhu() ? '记下这次训练' : '记下这一天');
     }
 
     async function saveEntry(event) {
@@ -2479,6 +2900,7 @@
       const message = chooseEncouragement(previousMessage);
       const body = {
         date: state.selectedDate,
+        owner: state.profile,
         weight,
         period: state.form.period,
         symptoms: Array.from(state.form.symptoms),
@@ -2487,6 +2909,8 @@
         breakfast: state.form.breakfast,
         nuts: state.form.nuts,
         milk: state.form.milk,
+        muscle: state.form.muscle,
+        cut: state.form.cut,
         message,
       };
 
@@ -2501,13 +2925,13 @@
         if (!response.ok) throw new Error(result.error || '这次没有保存成功，请稍后再试一次。');
 
         const saved = result.record || { ...body, updated_at: new Date().toISOString() };
-        state.records.set(saved.date, saved);
+        state.records.set(recordKey(saved.owner || state.profile, saved.date), saved);
         state.loaded = true;
         state.loadFailed = false;
         setFormFromRecord(saved);
         renderAll();
         showFeedback(saved.message, '记好啦，送你一句');
-        playHeart();
+        playSaveAnimation();
       } catch (error) {
         showToast(error.message || '网络好像打了个盹，再试一次吧。');
       } finally {
@@ -2529,7 +2953,10 @@
         const result = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(result.error || '记录暂时没有打开。');
         const records = Array.isArray(result.records) ? result.records : [];
-        state.records = new Map(records.map((record) => [record.date, record]));
+        state.records = new Map(records.map((record) => {
+          const owner = record.owner === 'zhuzhu' ? 'zhuzhu' : 'panpan';
+          return [recordKey(owner, record.date), { ...record, owner }];
+        }));
         state.loaded = true;
         state.loading = false;
         state.loadFailed = false;
@@ -2549,6 +2976,12 @@
         return;
       }
       selectDate(els.datePicker.value);
+    });
+
+    els.profileTabs.forEach((button) => {
+      button.addEventListener('click', () => {
+        setProfile(button.dataset.profile);
+      });
     });
 
     els.prevDayBtn.addEventListener('click', () => {
@@ -2571,6 +3004,14 @@
       button.addEventListener('click', () => {
         const habit = button.dataset.habit;
         state.form[habit] = !state.form[habit];
+        syncFormButtons();
+      });
+    });
+
+    els.trainingBtns.forEach((button) => {
+      button.addEventListener('click', () => {
+        const training = button.dataset.training;
+        state.form[training] = !state.form[training];
         syncFormButtons();
       });
     });
@@ -2651,7 +3092,7 @@
         const width = Math.round(entries[0].contentRect.width);
         if (!width || width === chartWidth) return;
         chartWidth = width;
-        if (state.records.size) renderChart();
+        if (recordsFor(state.profile).length) renderChart();
       });
       chartObserver.observe(els.chart.parentElement);
     }
@@ -2661,6 +3102,7 @@
     els.datePicker.min = '2000-01-01';
     els.datePicker.value = todayKey;
     els.weightInput.value = '';
+    applyProfileUI();
     updateDateView();
     syncFormButtons();
     loadRecords();

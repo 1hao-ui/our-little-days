@@ -23,20 +23,23 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 
 ## 1. 已经做好的功能
 
+- 两个独立档案：潘潘（粉色）和猪猪（淡雾蓝），同一个网址里一键切换
+- 潘潘：保留月经状态、小习惯、月经日历、周期统计和全部记录
+- 猪猪：健身主题，隐藏月经相关内容，每日记录「增肌 / 减脂」
+- 两个人的体重、图表、明细完全分开，互不混在一起
 - 今日打卡：日期可回看过去，未来日期不可选；体重可为空，保留一位小数
-- 月经状态：没来 / 来了·少 / 来了·中 / 来了·多
-- 今天的小习惯：早餐、每日坚果、牛奶，点一下即可记录
+- 今天的小习惯：早餐、每日坚果、牛奶，点一下即可记录（潘潘）
+- 今天的小训练：增肌、减脂，可以多选（猪猪）
 - 身体感受分成「有点辛苦」和「也有舒服的时候」两组，可以同时选择
-  - 有点辛苦：痛经、头晕、乏力、失眠、食欲差
+  - 有点辛苦：头晕、乏力、失眠、食欲差；痛经只在潘潘页面显示
   - 也有舒服的时候：精神好、睡得好、胃口好、身体轻松、皮肤状态好
 - 心情：好 / 一般 / 累，可选
-- 同一天重复保存会覆盖当天记录，不会新增重复行
-- 保存成功有爱心上浮动画和随机鼓励话
+- 每个人每天重复保存会覆盖自己的当天记录，不会串到另一个人
+- 保存成功有随机鼓励话；潘潘是爱心上浮，猪猪是小哑铃上浮
 - 体重趋势：最近 30 天 / 90 天，柔和折线，可选目标体重虚线
-- 月经日历：可左右翻月，按流量显示深浅粉色，今天有细描边
-- 周期统计：最近一次来潮、最近三次间隔、平均间隔
-- 明细列表：按日期倒序；点击任意一条回到打卡区修改
-- CSV 导出：UTF-8 带 BOM，Excel 打开中文不乱码
+- 月经日历只出现在潘潘页面，可左右翻月，按流量显示深浅粉色
+- 明细列表按日期倒序；点击任意一条回到打卡区修改
+- CSV 导出带「记录人」列，两个人的记录放在同一份文件里
 - 自定义粉色小猪 PWA 图标，iPhone 和 Android 都可以添加到主屏幕
 - 附带一个轻量 Android WebView 包装工程，可自行构建 APK
 - 全站无账号、无第三方统计、无外部脚本；数据只在 D1
@@ -67,6 +70,8 @@ our-little-days/
 ```
 
 这个项目只有一个 Cloudflare Pages 项目。`public/_worker.js` 使用 Pages 的 Advanced Mode，实际就是运行在 Cloudflare 边缘的 Worker，因此页面和 API 能共享同一个域名、同一个随机路径，不用处理跨域，也不需要再部署第二个 Worker 项目。D1 绑定通过 `wrangler.jsonc` 配置。
+
+两个人在同一个页面里用顶部的小胶囊切换：潘潘是粉色主题，猪猪是淡雾蓝主题。切换只改变当前查看和编辑的档案，不改变网址，也不会把两个人的数据混在一起。
 
 ---
 
@@ -284,7 +289,8 @@ GET  /<APP_SECRET>/api/export     # 下载 CSV
 
 ```sql
 CREATE TABLE records (
-  date TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  owner TEXT NOT NULL,
   weight REAL,
   period TEXT,
   symptoms TEXT,
@@ -294,35 +300,40 @@ CREATE TABLE records (
   nuts INTEGER,
   milk INTEGER,
   positives TEXT,
-  updated_at TEXT
+  muscle INTEGER,
+  cut INTEGER,
+  updated_at TEXT,
+  PRIMARY KEY (date, owner)
 );
 ```
 
-- `period`：`none` / `light` / `mid` / `heavy`
-- `symptoms`：逗号分隔的负面身体感受，例如 `痛经,乏力`
+- `owner`：`panpan` 或 `zhuzhu`，和日期一起组成主键，所以两个人同一天可以各有一条
+- `period`：`none` / `light` / `mid` / `heavy`，只在潘潘记录中使用
+- `symptoms`：逗号分隔的负面身体感受，例如 `乏力,失眠`
 - `positives`：逗号分隔的正面身体感受，例如 `精神好,睡得好`
-- `breakfast` / `nuts` / `milk`：`1` 表示吃了或喝了，`0` 表示没有；旧记录为 `NULL`
+- `breakfast` / `nuts` / `milk`：潘潘的每日小习惯，`1` 表示是，`0` 表示否
+- `muscle` / `cut`：猪猪的增肌 / 减脂，`1` 表示是，`0` 表示否
 - `mood`：`good` / `okay` / `tired`，也可以为空
-- `date`：`YYYY-MM-DD`，主键，因此一天只有一条
 - `updated_at`：UTC ISO 时间
 
-API 会检查日期格式、未来日期、体重范围、固定选项和长度，并使用参数化 SQL；页面用 `textContent` 渲染数据，不把用户内容当 HTML 插入。
+API 会检查日期、记录人、体重范围、固定选项和长度，并使用参数化 SQL；页面用 `textContent` 渲染数据，不把用户内容当 HTML 插入。
 
 CSV 列固定为：
 
 ```text
-日期,体重,月经状态,身体感受,心情,鼓励话,早餐,每日坚果,牛奶,舒服的感受
+日期,记录人,体重,月经状态,身体感受,心情,鼓励话,早餐,每日坚果,牛奶,增肌,减脂,舒服的感受
 ```
 
-文件带 UTF-8 BOM，Excel 直接打开不会乱码；同时做了 CSV 转义和公式注入防护。旧记录的新增列会留空，不会误写成「没吃」。
+文件带 UTF-8 BOM，Excel 直接打开不会乱码；同时做了 CSV 转义和公式注入防护。旧记录会归到潘潘名下，新字段留空，不会误写成「没吃」。
 
-已有旧数据库升级时，执行一次：
+已有旧数据库升级时，先导出一份 CSV 备份，再按顺序执行未应用的迁移：
 
 ```powershell
 npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0002_add_habits_and_positives.sql --yes
+npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0003_profiles_and_fitness.sql --yes
 ```
 
-新数据库直接执行 `npm run db:remote` 即可，`schema.sql` 已经包含新字段。
+新数据库直接执行 `npm run db:remote` 即可，`schema.sql` 已经包含全部字段和双人主键。
 
 ---
 
