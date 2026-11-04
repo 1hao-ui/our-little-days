@@ -262,6 +262,46 @@
       background: var(--mist);
     }
 
+    .both-done {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: -2px 0 14px;
+      padding: 9px 12px;
+      border: 1px solid #F5DED7;
+      border-radius: 14px;
+      background: #FFF6F1;
+      color: #8A6B65;
+      font-size: 10.5px;
+      line-height: 1.45;
+      animation: page-fade .3s var(--ease) both;
+    }
+
+    .both-done-mark {
+      display: flex;
+      flex: none;
+      align-items: center;
+    }
+
+    .both-dot {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #FFF6F1;
+      border-radius: 50%;
+    }
+
+    .both-dot + .both-dot {
+      margin-left: -5px;
+    }
+
+    .both-dot.panpan {
+      background: var(--pink);
+    }
+
+    .both-dot.zhuzhu {
+      background: var(--mist);
+    }
+
     .soft-badge,
     .count-pill {
       display: inline-flex;
@@ -1127,6 +1167,22 @@
       font-weight: 650;
     }
 
+    .day-btn.training-muscle {
+      background: #E2F0F6;
+      color: #587581;
+    }
+
+    .day-btn.training-cut {
+      background: #F8ECDD;
+      color: #81684F;
+    }
+
+    .day-btn.training-both {
+      background: #9CC1D0;
+      color: #334F5B;
+      font-weight: 650;
+    }
+
     .day-btn:disabled {
       color: #DCCFC9;
       cursor: default;
@@ -1164,6 +1220,18 @@
 
     .legend-heavy {
       background: #EE9AA3;
+    }
+
+    .legend-training-muscle {
+      background: #E2F0F6;
+    }
+
+    .legend-training-cut {
+      background: #F8ECDD;
+    }
+
+    .legend-training-both {
+      background: #9CC1D0;
     }
 
     .cycle-summary {
@@ -1232,6 +1300,12 @@
     .cycle-empty {
       color: #B7A49D;
       font-size: 10px;
+    }
+
+    .training-summary-note {
+      margin: 6px 0 0;
+      color: #B7A49D;
+      font-size: 9.5px;
     }
 
     .records-list {
@@ -1700,6 +1774,14 @@
       opacity: .78;
     }
 
+    .page.is-zhuzhu .day-btn:hover:not(:disabled) {
+      background: var(--mist-soft);
+    }
+
+    .page.is-zhuzhu .day-btn.is-today {
+      outline-color: #7FA6B6;
+    }
+
     .page.is-zhuzhu .habit-mini.is-done {
       background: var(--mist-soft);
       color: #547382;
@@ -1837,6 +1919,10 @@
         <div class="profile-switch" role="group" aria-label="选择记录人">
           <button class="profile-tab" type="button" data-profile="panpan" aria-pressed="true"><span class="profile-dot panpan"></span>潘潘</button>
           <button class="profile-tab" type="button" data-profile="zhuzhu" aria-pressed="false"><span class="profile-dot zhuzhu"></span>猪猪</button>
+        </div>
+        <div class="both-done" id="bothDone" hidden aria-live="polite">
+          <span class="both-done-mark" aria-hidden="true"><span class="both-dot panpan"></span><span class="both-dot zhuzhu"></span></span>
+          <span>今天两个人都打卡啦，真棒。</span>
         </div>
         <div class="section-head">
           <div>
@@ -2020,7 +2106,7 @@
         <p class="gentle-line">慢慢来，不着急</p>
       </section>
 
-      <section class="card calendar-card profile-panpan-only" id="calendarSection" aria-labelledby="calendarTitle">
+      <section class="card calendar-card" id="calendarSection" aria-labelledby="calendarTitle">
         <div class="section-head">
           <div>
             <p class="eyebrow">一月一月</p>
@@ -2040,12 +2126,17 @@
           <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
         </div>
         <div class="calendar-grid" id="calendarGrid" aria-label="月经日历"></div>
-        <div class="calendar-legend" aria-label="来潮颜色由浅到深对应流量少到多">
+        <div class="calendar-legend profile-panpan-only" aria-label="来潮颜色由浅到深对应流量少到多">
           <span class="legend-item"><span class="legend-dot legend-light"></span>少</span>
           <span class="legend-item"><span class="legend-dot legend-mid"></span>中</span>
           <span class="legend-item"><span class="legend-dot legend-heavy"></span>多</span>
         </div>
-        <div class="cycle-summary">
+        <div class="calendar-legend profile-zhuzhu-only" id="trainingLegend" hidden aria-label="训练颜色说明">
+          <span class="legend-item"><span class="legend-dot legend-training-muscle"></span>增肌</span>
+          <span class="legend-item"><span class="legend-dot legend-training-cut"></span>减脂</span>
+          <span class="legend-item"><span class="legend-dot legend-training-both"></span>两个都练</span>
+        </div>
+        <div class="cycle-summary profile-panpan-only">
           <div class="cycle-grid">
             <div>
               <span class="cycle-stat-label">最近一次来潮</span>
@@ -2060,6 +2151,11 @@
             <span class="cycle-intervals-label">最近三次间隔</span>
             <div class="cycle-tags" id="cycleTags"><span class="cycle-empty">再多记几次就有啦</span></div>
           </div>
+        </div>
+        <div class="cycle-summary training-summary profile-zhuzhu-only" id="trainingSummary" hidden>
+          <span class="cycle-stat-label">这个月训练</span>
+          <span class="cycle-stat-value is-empty" id="trainingMonthValue">还没有记录</span>
+          <p class="training-summary-note">每一次都算数。</p>
         </div>
       </section>
 
@@ -2211,6 +2307,7 @@
       heroSubtitle: document.getElementById('heroSubtitle'),
       heroDumbbell: document.getElementById('heroDumbbell'),
       profileTabs: Array.from(document.querySelectorAll('.profile-tab')),
+      bothDone: document.getElementById('bothDone'),
       form: document.getElementById('entryForm'),
       formEyebrow: document.getElementById('formEyebrow'),
       formTitle: document.getElementById('formTitle'),
@@ -2239,8 +2336,10 @@
       chartEmptyText: document.getElementById('chartEmptyText'),
       rangeBtns: Array.from(document.querySelectorAll('.range-btn')),
       targetLegend: document.getElementById('targetLegend'),
+      calendarTitle: document.getElementById('calendarTitle'),
       monthTitle: document.getElementById('monthTitle'),
       calendarGrid: document.getElementById('calendarGrid'),
+      trainingMonthValue: document.getElementById('trainingMonthValue'),
       prevMonthBtn: document.getElementById('prevMonthBtn'),
       nextMonthBtn: document.getElementById('nextMonthBtn'),
       lastPeriodValue: document.getElementById('lastPeriodValue'),
@@ -2341,6 +2440,8 @@
         element.hidden = !zhuzhu;
       });
       els.recordsTitle.textContent = zhuzhu ? '猪猪的训练记录' : '潘潘的记录';
+      els.calendarTitle.textContent = zhuzhu ? '训练日历' : '月经日历';
+      els.calendarGrid.setAttribute('aria-label', zhuzhu ? '训练日历' : '月经日历');
       document.title = zhuzhu ? '猪猪的训练日常 · 我们的小日子' : '我们的小日子';
     }
 
@@ -2375,7 +2476,7 @@
         : (zhuzhu ? '补记这次训练' : '补记这一天');
       const record = getRecord(state.selectedDate);
       els.saveBtnLabel.textContent = record
-        ? (zhuzhu ? '更新这次训练' : '更新这一天')
+        ? '更新这一天'
         : (zhuzhu ? '记下这次训练' : '记下这一天');
     }
 
@@ -2445,6 +2546,14 @@
       renderCalendar();
       renderCycles();
       renderRecords();
+      renderBothDone();
+    }
+
+    function renderBothDone() {
+      const bothDone = state.loaded
+        && Boolean(getRecord(todayKey, 'panpan'))
+        && Boolean(getRecord(todayKey, 'zhuzhu'));
+      els.bothDone.hidden = !bothDone;
     }
 
     function renderChart() {
@@ -2600,6 +2709,9 @@
       const year = month.getFullYear();
       const monthIndex = month.getMonth();
       const monthLabel = `${year}年${monthIndex + 1}月`;
+      const zhuzhu = isZhuzhu();
+      els.calendarTitle.textContent = zhuzhu ? '训练日历' : '月经日历';
+      els.calendarGrid.setAttribute('aria-label', zhuzhu ? '训练日历' : '月经日历');
       els.monthTitle.textContent = monthLabel;
       const currentMonthIndex = todayDate.getFullYear() * 12 + todayDate.getMonth();
       els.nextMonthBtn.disabled = year * 12 + monthIndex >= currentMonthIndex;
@@ -2627,13 +2739,30 @@
         button.dataset.date = key;
         button.textContent = String(dayNumber);
         const record = getRecord(key);
-        const flow = record?.period || 'none';
-        if (flow !== 'none') button.classList.add(`flow-${flow}`);
+        let statusLabel = '';
+        if (zhuzhu) {
+          const muscleDone = record?.muscle === 1 || record?.muscle === true;
+          const cutDone = record?.cut === 1 || record?.cut === true;
+          if (muscleDone && cutDone) {
+            button.classList.add('training-both');
+            statusLabel = '增肌和减脂';
+          } else if (muscleDone) {
+            button.classList.add('training-muscle');
+            statusLabel = '增肌';
+          } else if (cutDone) {
+            button.classList.add('training-cut');
+            statusLabel = '减脂';
+          }
+        } else {
+          const flow = record?.period || 'none';
+          if (flow !== 'none') button.classList.add(`flow-${flow}`);
+          if (flow !== 'none') statusLabel = PERIOD_LABELS[flow];
+        }
         if (key === todayKey) {
           button.classList.add('is-today');
           button.setAttribute('aria-current', 'date');
         }
-        const label = `${formatShortDate(key, year !== todayDate.getFullYear())}${flow !== 'none' ? `，${PERIOD_LABELS[flow]}` : ''}${key === todayKey ? '，今天' : ''}`;
+        const label = `${formatShortDate(key, year !== todayDate.getFullYear())}${statusLabel ? `，${statusLabel}` : ''}${key === todayKey ? '，今天' : ''}`;
         button.setAttribute('aria-label', label);
         if (key > todayKey) {
           button.disabled = true;
@@ -2643,6 +2772,16 @@
       }
 
       els.calendarGrid.replaceChildren(fragment);
+
+      if (zhuzhu) {
+        const monthPrefix = `${year}-${pad2(monthIndex + 1)}`;
+        const trainingDays = recordsFor('zhuzhu')
+          .filter((record) => record.date.startsWith(monthPrefix))
+          .filter((record) => record.muscle === 1 || record.muscle === true || record.cut === 1 || record.cut === true)
+          .length;
+        els.trainingMonthValue.textContent = trainingDays ? `${trainingDays} 天` : '还没有记录';
+        els.trainingMonthValue.classList.toggle('is-empty', trainingDays === 0);
+      }
     }
 
     function renderCycles() {
@@ -2876,7 +3015,7 @@
       els.saveBtnLabel.textContent = saving
         ? '正在轻轻记下…'
         : record
-          ? (isZhuzhu() ? '更新这次训练' : '更新这一天')
+          ? '更新这一天'
           : (isZhuzhu() ? '记下这次训练' : '记下这一天');
     }
 
