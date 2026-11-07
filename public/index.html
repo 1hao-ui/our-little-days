@@ -1010,6 +1010,38 @@
       fill: var(--pink-strong);
       stroke: #FFFDFC;
       stroke-width: 2;
+      cursor: pointer;
+    }
+
+    .chart-dot:focus {
+      outline: none;
+    }
+
+    .chart-dot:focus-visible {
+      stroke: #C9787E;
+      stroke-width: 2.6;
+    }
+
+    .chart-dot.is-selected {
+      stroke: #D98288;
+      stroke-width: 2.6;
+    }
+
+    .chart-value {
+      pointer-events: none;
+    }
+
+    .chart-value-bg {
+      fill: #FFFDFC;
+      stroke: #F0C9C8;
+      stroke-width: 1;
+    }
+
+    .chart-value-text {
+      fill: #6E5652;
+      font-family: inherit;
+      font-size: 10.5px;
+      font-weight: 650;
     }
 
     .chart-target {
@@ -1769,6 +1801,18 @@
       fill: #8EB7C8;
     }
 
+    .page.is-zhuzhu .chart-dot.is-selected {
+      stroke: #5F8798;
+    }
+
+    .page.is-zhuzhu .chart-value-bg {
+      stroke: #C6DFE8;
+    }
+
+    .page.is-zhuzhu .chart-value-text {
+      fill: #4D6C79;
+    }
+
     .page.is-zhuzhu .chart-area {
       fill: #EAF4F8;
       opacity: .78;
@@ -2283,6 +2327,7 @@
       records: new Map(),
       profile: readStoredProfile(),
       selectedDate: todayKey,
+      selectedChartDate: null,
       chartRange: 30,
       calendarMonth: new Date(todayDate.getFullYear(), todayDate.getMonth(), 1),
       loaded: false,
@@ -2448,6 +2493,7 @@
     function setProfile(profile) {
       if (!Object.prototype.hasOwnProperty.call(PROFILE_LABELS, profile) || state.saving) return;
       state.profile = profile;
+      state.selectedChartDate = null;
       try {
         window.localStorage.setItem(PROFILE_STORAGE_KEY, profile);
       } catch {
@@ -2587,6 +2633,7 @@
       }
 
       if (!points.length) {
+        state.selectedChartDate = null;
         els.chart.setAttribute('hidden', '');
         els.chartEmpty.hidden = false;
         if (state.loading) {
@@ -2642,6 +2689,8 @@
         x: xForDate(point.date),
         y: yForWeight(point.weight),
       }));
+      const selectedPoint = coords.find((point) => point.date === state.selectedChartDate) || null;
+      if (!selectedPoint) state.selectedChartDate = null;
 
       const gridValues = [maxValue, (maxValue + minValue) / 2, minValue];
       const gridMarkup = gridValues.map((value) => {
@@ -2686,12 +2735,27 @@
       const dots = coords.map((point) => {
         const date = parseDateKey(point.date);
         const label = `${date.getMonth() + 1}月${date.getDate()}日 ${point.weight.toFixed(1)} 千克`;
-        return `<circle class="chart-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3.4" tabindex="0"><title>${label}</title></circle>`;
+        const active = point.date === state.selectedChartDate;
+        return `<circle class="chart-dot${active ? ' is-selected' : ''}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${active ? 4.2 : 3.4}" tabindex="0" role="button" aria-label="${label}，点击查看数值" aria-pressed="${active}" data-date="${point.date}" data-weight="${point.weight.toFixed(1)}"><title>${label}</title></circle>`;
       }).join('');
+
+      let valueMarkup = '';
+      if (selectedPoint) {
+        const bubbleWidth = 62;
+        const bubbleHeight = 22;
+        const bubbleCenter = Math.min(
+          Math.max(selectedPoint.x, margin.left + bubbleWidth / 2 + 2),
+          width - margin.right - bubbleWidth / 2 - 2,
+        );
+        const bubbleLeft = bubbleCenter - bubbleWidth / 2;
+        let bubbleTop = selectedPoint.y - 35;
+        if (bubbleTop < 2) bubbleTop = selectedPoint.y + 12;
+        valueMarkup = `<g class="chart-value" aria-hidden="true"><rect class="chart-value-bg" x="${bubbleLeft.toFixed(1)}" y="${bubbleTop.toFixed(1)}" width="${bubbleWidth}" height="${bubbleHeight}" rx="11"/><text class="chart-value-text" x="${bubbleCenter.toFixed(1)}" y="${(bubbleTop + 15).toFixed(1)}" text-anchor="middle">${selectedPoint.weight.toFixed(1)} kg</text></g>`;
+      }
 
       els.chart.setAttribute(
         'aria-label',
-        `${PROFILE_LABELS[state.profile]}最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。`,
+        `${PROFILE_LABELS[state.profile]}最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。点按小圆点可查看体重数值。`,
       );
       els.chart.innerHTML = `
         <title>最近 ${state.chartRange} 天体重趋势</title>
@@ -2700,6 +2764,7 @@
         ${areaPath ? `<path class="chart-area" d="${areaPath}"/>` : ''}
         ${linePath ? `<path class="chart-line" d="${linePath}"/>` : ''}
         ${dots}
+        ${valueMarkup}
         ${xLabels}
       `;
     }
@@ -3189,11 +3254,39 @@
     els.rangeBtns.forEach((button) => {
       button.addEventListener('click', () => {
         state.chartRange = Number(button.dataset.range);
+        state.selectedChartDate = null;
         els.rangeBtns.forEach((item) => {
           item.setAttribute('aria-pressed', String(item === button));
         });
         renderChart();
       });
+    });
+
+    function handleChartPoint(target) {
+      if (!(target instanceof Element)) return;
+      const dot = target.closest('.chart-dot');
+      if (!dot) {
+        if (state.selectedChartDate) {
+          state.selectedChartDate = null;
+          renderChart();
+        }
+        return;
+      }
+      state.selectedChartDate = state.selectedChartDate === dot.dataset.date
+        ? null
+        : dot.dataset.date;
+      renderChart();
+    }
+
+    els.chart.addEventListener('click', (event) => {
+      handleChartPoint(event.target);
+    });
+
+    els.chart.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (!(event.target instanceof Element) || !event.target.closest('.chart-dot')) return;
+      event.preventDefault();
+      handleChartPoint(event.target);
     });
 
     els.prevMonthBtn.addEventListener('click', () => {
