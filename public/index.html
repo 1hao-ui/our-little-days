@@ -2000,7 +2000,7 @@
               <span class="field-hint">可以留空</span>
             </div>
             <div class="weight-box">
-              <input class="weight-input" id="weightInput" type="number" inputmode="decimal" step="0.1" min="0" max="500" placeholder="0.0" autocomplete="off">
+              <input class="weight-input" id="weightInput" type="number" inputmode="decimal" step="0.01" min="0" max="500" placeholder="0.00" autocomplete="off">
               <span class="weight-unit" aria-hidden="true">kg</span>
             </div>
           </div>
@@ -2538,7 +2538,7 @@
       state.form.muscle = record?.muscle === 1 || record?.muscle === true;
       state.form.cut = record?.cut === 1 || record?.cut === true;
       els.weightInput.value = record && record.weight !== null && record.weight !== undefined
-        ? Number(record.weight).toFixed(1)
+        ? Number(record.weight).toFixed(2)
         : '';
       syncFormButtons();
       if (record && record.message) {
@@ -2620,8 +2620,8 @@
         .sort((a, b) => b.date.localeCompare(a.date));
       if (allWeightRecords.length) {
         const latest = allWeightRecords[0];
-        els.latestWeight.textContent = `最近 ${Number(latest.weight).toFixed(1)} kg`;
-        els.latestWeight.title = `${formatShortDate(latest.date, true)} ${Number(latest.weight).toFixed(1)} kg`;
+        els.latestWeight.textContent = `最近 ${Number(latest.weight).toFixed(2)} kg`;
+        els.latestWeight.title = `${formatShortDate(latest.date, true)} ${Number(latest.weight).toFixed(2)} kg`;
       } else {
         els.latestWeight.textContent = '还没有记录';
       }
@@ -2629,7 +2629,7 @@
       const hasTarget = TARGET_WEIGHT !== null && Number.isFinite(Number(TARGET_WEIGHT));
       if (els.targetLegend) {
         els.targetLegend.hidden = !hasTarget || !points.length;
-        if (hasTarget) els.targetLegend.textContent = `小心愿 ${Number(TARGET_WEIGHT).toFixed(1)}`;
+        if (hasTarget) els.targetLegend.textContent = `小心愿 ${Number(TARGET_WEIGHT).toFixed(2)}`;
       }
 
       if (!points.length) {
@@ -2654,7 +2654,7 @@
       const width = Math.max(280, Math.round(els.chart.parentElement?.clientWidth || 380));
       const height = 178;
       els.chart.setAttribute('viewBox', `0 0 ${width} ${height}`);
-      const margin = { top: 15, right: 14, bottom: 24, left: 33 };
+      const margin = { top: 15, right: 14, bottom: 24, left: 42 };
       const plotWidth = width - margin.left - margin.right;
       const plotHeight = height - margin.top - margin.bottom;
 
@@ -2696,7 +2696,7 @@
       const gridMarkup = gridValues.map((value) => {
         const y = yForWeight(value);
         return `<line class="chart-grid" x1="${margin.left}" y1="${y.toFixed(1)}" x2="${width - margin.right}" y2="${y.toFixed(1)}"/>` +
-          `<text class="chart-axis-text" x="${margin.left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${value.toFixed(1)}</text>`;
+          `<text class="chart-axis-text" x="${margin.left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${value.toFixed(2)}</text>`;
       }).join('');
 
       let linePath = '';
@@ -2734,9 +2734,9 @@
 
       const dots = coords.map((point) => {
         const date = parseDateKey(point.date);
-        const label = `${date.getMonth() + 1}月${date.getDate()}日 ${point.weight.toFixed(1)} 千克`;
+        const label = `${date.getMonth() + 1}月${date.getDate()}日 ${point.weight.toFixed(2)} 千克`;
         const active = point.date === state.selectedChartDate;
-        return `<circle class="chart-dot${active ? ' is-selected' : ''}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${active ? 4.2 : 3.4}" tabindex="0" role="button" aria-label="${label}，点击查看数值" aria-pressed="${active}" data-date="${point.date}" data-weight="${point.weight.toFixed(1)}"><title>${label}</title></circle>`;
+        return `<circle class="chart-dot${active ? ' is-selected' : ''}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${active ? 4.2 : 3.4}" tabindex="0" role="button" aria-label="${label}，点击查看数值" aria-pressed="${active}" data-date="${point.date}" data-weight="${point.weight.toFixed(2)}"><title>${label}</title></circle>`;
       }).join('');
 
       let valueMarkup = '';
@@ -2750,12 +2750,12 @@
         const bubbleLeft = bubbleCenter - bubbleWidth / 2;
         let bubbleTop = selectedPoint.y - 35;
         if (bubbleTop < 2) bubbleTop = selectedPoint.y + 12;
-        valueMarkup = `<g class="chart-value" aria-hidden="true"><rect class="chart-value-bg" x="${bubbleLeft.toFixed(1)}" y="${bubbleTop.toFixed(1)}" width="${bubbleWidth}" height="${bubbleHeight}" rx="11"/><text class="chart-value-text" x="${bubbleCenter.toFixed(1)}" y="${(bubbleTop + 15).toFixed(1)}" text-anchor="middle">${selectedPoint.weight.toFixed(1)} kg</text></g>`;
+        valueMarkup = `<g class="chart-value" aria-hidden="true"><rect class="chart-value-bg" x="${bubbleLeft.toFixed(1)}" y="${bubbleTop.toFixed(1)}" width="${bubbleWidth}" height="${bubbleHeight}" rx="11"/><text class="chart-value-text" x="${bubbleCenter.toFixed(1)}" y="${(bubbleTop + 15).toFixed(1)}" text-anchor="middle">${selectedPoint.weight.toFixed(2)} kg</text></g>`;
       }
 
       els.chart.setAttribute(
         'aria-label',
-        `${PROFILE_LABELS[state.profile]}最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(1)} 千克。点按小圆点可查看体重数值。`,
+        `${PROFILE_LABELS[state.profile]}最近 ${state.chartRange} 天体重趋势，共 ${points.length} 次记录。最新 ${Number(allWeightRecords[0].weight).toFixed(2)} 千克。点按小圆点可查看体重数值。`,
       );
       els.chart.innerHTML = `
         <title>最近 ${state.chartRange} 天体重趋势</title>
@@ -2947,7 +2947,7 @@
         const weightValue = node.querySelector('.record-weight-value');
         const weightUnit = node.querySelector('.record-weight-unit');
         if (record.weight !== null && record.weight !== undefined) {
-          weightValue.textContent = Number(record.weight).toFixed(1);
+          weightValue.textContent = Number(record.weight).toFixed(2);
           weightUnit.hidden = false;
         } else {
           weightValue.textContent = '—';
@@ -3097,7 +3097,7 @@
           els.weightInput.focus();
           return;
         }
-        weight = Math.round(parsed * 10) / 10;
+        weight = Math.round(parsed * 100) / 100;
       }
 
       const previousMessage = getRecord(state.selectedDate)?.message || '';

@@ -121,7 +121,7 @@ function cleanRecordPayload(body) {
     if (!Number.isFinite(parsed) || parsed < 0 || parsed > 500) {
       return { error: '体重数字好像没有填对，再检查一下呀。' };
     }
-    weight = Math.round(parsed * 10) / 10;
+    weight = Math.round(parsed * 100) / 100;
   }
 
   let period = typeof body.period === 'string' ? body.period : 'none';
@@ -281,7 +281,7 @@ async function exportCsv(env) {
       OWNER_LABELS[record.owner] || '',
       record.weight === null || record.weight === undefined
         ? ''
-        : Number(record.weight).toFixed(1),
+        : Number(record.weight).toFixed(2),
       isPanpan ? PERIOD_LABELS[record.period] || '没来' : '',
       record.symptoms || '',
       MOOD_LABELS[record.mood] || '',
