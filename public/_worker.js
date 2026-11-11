@@ -1,7 +1,7 @@
 /**
  * 这个文件同时是：
  *  1. 页面门禁：只有 /<APP_SECRET> 才能看到页面；
- *  2. API Worker：/<APP_SECRET>/api/records 与 /<APP_SECRET>/api/export。
+ *  2. API Worker：/<APP_SECRET>/api/records、/api/meetups、/api/export 与 /api/export-meetups。
  *
  * APP_SECRET 只存在于 Cloudflare 环境变量 / 本地 .dev.vars 中，
  * 不写死在页面可见的代码里。
@@ -27,6 +27,7 @@ const OWNER_LABELS = {
   panpan: '潘潘',
   zhuzhu: '猪猪',
 };
+const MEETUP_NOTE_LIMIT = 60;
 const APP_TIME_ZONE = 'Asia/Shanghai';
 const ICON_FILES = new Set([
   'pig-cozy-32.png',
@@ -200,6 +201,102 @@ async function listRecords(env) {
   return results || [];
 }
 
+function meetupFromRow(row) {
+  if (!row) return null;
+  return {
+    date: row.date,
+    notes: {
+      panpan: row.panpan_note || '',
+      zhuzhu: row.zhuzhu_note || '',
+    },
+  };
+}
+
+async function listMeetups(env) {
+  const { results } = await env.DB.prepare(
+    `SELECT date, panpan_note, zhuzhu_note
+     FROM meetups
+     ORDER BY date ASC`,
+  ).all();
+  return (results || []).map(meetupFromRow);
+}
+
+async function getMeetup(env, date) {
+  const row = await env.DB.prepare(
+    `SELECT date, panpan_note, zhuzhu_note
+     FROM meetups
+     WHERE date = ?`,
+  ).bind(date).first();
+  return meetupFromRow(row);
+}
+
+function cleanMeetupNote(value) {
+  if (typeof value !== 'string') return '';
+  return Array.from(value.trim().replace(/\s+/g, ' '))
+    .slice(0, MEETUP_NOTE_LIMIT)
+    .join('');
+}
+
+function meetupDateError(value) {
+  const today = todayInAppTimeZone();
+  if (!isValidDate(value)) return '日期好像没有选对，再看看呀。';
+  if (value > today) return '未来的日子还没到呢，先记今天吧。';
+  if (value < '2000-01-01') return '日期好像太早啦。';
+  return '';
+}
+
+async function saveMeetup(request, env) {
+  const parsed = await readJson(request);
+  if (parsed.error) return json({ error: parsed.error }, 400);
+
+  const body = parsed.body;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return json({ error: '这次没有看清见面日，再试一次吧。' }, 400);
+  }
+
+  const date = body.date;
+  const dateError = meetupDateError(date);
+  if (dateError) return json({ error: dateError }, 400);
+
+  const action = body.action;
+  if (!['mark', 'unmark', 'note'].includes(action)) {
+    return json({ error: '这个见面日操作没有认出来。' }, 400);
+  }
+
+  if (action === 'mark') {
+    const now = new Date().toISOString();
+    await env.DB.prepare(
+      `INSERT INTO meetups (date, panpan_note, zhuzhu_note, created_at, updated_at)
+       VALUES (?, NULL, NULL, ?, ?)
+       ON CONFLICT(date) DO UPDATE SET updated_at = excluded.updated_at`,
+    ).bind(date, now, now).run();
+    return json({ meetup: await getMeetup(env, date) }, 200);
+  }
+
+  if (action === 'unmark') {
+    await env.DB.prepare('DELETE FROM meetups WHERE date = ?').bind(date).run();
+    return json({ meetup: null }, 200);
+  }
+
+  const owner = body.owner;
+  if (!OWNER_OPTIONS.includes(owner)) {
+    return json({ error: '记录人没有认出来，再试一次吧。' }, 400);
+  }
+
+  const meetup = await getMeetup(env, date);
+  if (!meetup) {
+    return json({ error: '先点亮这天的见面日，再写小纸条吧。' }, 409);
+  }
+
+  const note = cleanMeetupNote(body.note);
+  const column = owner === 'panpan' ? 'panpan_note' : 'zhuzhu_note';
+  await env.DB.prepare(
+    `UPDATE meetups SET ${column} = ?, updated_at = ? WHERE date = ?`,
+  ).bind(note || null, new Date().toISOString(), date).run();
+
+  return json({ meetup: await getMeetup(env, date) }, 200);
+}
+
 async function saveRecord(request, env) {
   const parsed = await readJson(request);
   if (parsed.error) return json({ error: parsed.error }, 400);
@@ -308,6 +405,27 @@ async function exportCsv(env) {
   });
 }
 
+async function exportMeetupsCsv(env) {
+  const meetups = await listMeetups(env);
+  const header = ['日期', '潘潘的备注', '猪猪的备注'];
+  const rows = meetups.map((meetup) => [
+    meetup.date,
+    meetup.notes.panpan || '',
+    meetup.notes.zhuzhu || '',
+  ]);
+  const csv = `\uFEFF${[header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n')}\r\n`;
+  const filename = `our-little-days-meetups-${todayInAppTimeZone()}.csv`;
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      'content-type': 'text/csv; charset=utf-8',
+      'content-disposition': `attachment; filename="${filename}"`,
+      'cache-control': 'no-store',
+    },
+  });
+}
+
 async function handleApi(request, env, endpoint) {
   if (!env.DB) {
     console.error('D1 binding "DB" is missing.');
@@ -317,7 +435,11 @@ async function handleApi(request, env, endpoint) {
   if (endpoint === 'records') {
     if (request.method === 'GET') {
       try {
-        return json({ records: await listRecords(env) });
+        const [records, meetups] = await Promise.all([
+          listRecords(env),
+          listMeetups(env),
+        ]);
+        return json({ records, meetups });
       } catch (error) {
         console.error('Failed to list records:', error);
         return json({ error: '记录暂时没有读出来，请刷新再试一次。' }, 500);
@@ -334,6 +456,18 @@ async function handleApi(request, env, endpoint) {
     return json({ error: '这个操作暂不支持。' }, 405, { allow: 'GET, POST' });
   }
 
+  if (endpoint === 'meetups') {
+    if (request.method !== 'POST') {
+      return json({ error: '这个操作暂不支持。' }, 405, { allow: 'POST' });
+    }
+    try {
+      return await saveMeetup(request, env);
+    } catch (error) {
+      console.error('Failed to save meetup:', error);
+      return json({ error: '见面日暂时没有记上，请稍后再试一次。' }, 500);
+    }
+  }
+
   if (endpoint === 'export') {
     if (request.method !== 'GET') return json({ error: '这个操作暂不支持。' }, 405, { allow: 'GET' });
     try {
@@ -341,6 +475,16 @@ async function handleApi(request, env, endpoint) {
     } catch (error) {
       console.error('Failed to export records:', error);
       return json({ error: '导出没有成功，请稍后再试一次。' }, 500);
+    }
+  }
+
+  if (endpoint === 'export-meetups') {
+    if (request.method !== 'GET') return json({ error: '这个操作暂不支持。' }, 405, { allow: 'GET' });
+    try {
+      return await exportMeetupsCsv(env);
+    } catch (error) {
+      console.error('Failed to export meetups:', error);
+      return json({ error: '见面日导出没有成功，请稍后再试一次。' }, 500);
     }
   }
 

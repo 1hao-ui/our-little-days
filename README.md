@@ -41,8 +41,11 @@ https://our-little-days-4u7.pages.dev/<APP_SECRET>
 - 月经日历只出现在潘潘页面，可左右翻月，按流量显示深浅粉色
 - 训练日历只出现在猪猪页面：增肌浅蓝、减脂浅杏、两个都练是深雾蓝
 - 两个人都完成今天的打卡时，打卡卡顶部会出现一句小小的双人提示
+- 见面日：任意一方标记后，两边日历的同一天都会变成金色，并带轻微闪烁
+- 见面日的小纸条按人分开写，不限顺序、不要求两个人都写；取消时两边的标记一起取消
+- 如果当天是见面日且两个人都打卡，提示会合并成「今天见面，两个人都打卡啦」
 - 明细列表按日期倒序；点击任意一条回到打卡区修改
-- CSV 导出带「记录人」列，两个人的记录放在同一份文件里
+- CSV 导出带「记录人」列，两个人的记录放在同一份文件里；见面日可另外导出
 - 自定义粉色小猪 PWA 图标，iPhone 和 Android 都可以添加到主屏幕
 - 附带一个轻量 Android WebView 包装工程，可自行构建 APK
 - 全站无账号、无第三方统计、无外部脚本；数据只在 D1
@@ -319,6 +322,23 @@ CREATE TABLE records (
 - `mood`：`good` / `okay` / `tired`，也可以为空
 - `updated_at`：UTC ISO 时间
 
+见面日使用一张单独的表，日期是共享的，两个人的备注分列保存：
+
+```sql
+CREATE TABLE meetups (
+  date TEXT PRIMARY KEY,
+  panpan_note TEXT,
+  zhuzhu_note TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+```
+
+- 一方标记后双方日历同时变金；不需要两边各点一次
+- 备注可以为空，也可以由两个人依次补充，互不覆盖
+- 取消见面日会一起清掉这一天的两段备注
+- 备注最多 60 个字
+
 API 会检查日期、记录人、体重范围、固定选项和长度，并使用参数化 SQL；页面用 `textContent` 渲染数据，不把用户内容当 HTML 插入。
 
 CSV 列固定为：
@@ -329,14 +349,21 @@ CSV 列固定为：
 
 文件带 UTF-8 BOM，Excel 直接打开不会乱码；同时做了 CSV 转义和公式注入防护。旧记录会归到潘潘名下，新字段留空，不会误写成「没吃」。
 
+见面日另有一份导出，列为：
+
+```text
+日期,潘潘的备注,猪猪的备注
+```
+
 已有旧数据库升级时，先导出一份 CSV 备份，再按顺序执行未应用的迁移：
 
 ```powershell
 npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0002_add_habits_and_positives.sql --yes
 npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0003_profiles_and_fitness.sql --yes
+npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0004_meetups.sql --yes
 ```
 
-新数据库直接执行 `npm run db:remote` 即可，`schema.sql` 已经包含全部字段和双人主键。
+新数据库直接执行 `npm run db:remote` 即可，`schema.sql` 已经包含全部字段、双人主键和见面日表。
 
 ---
 
@@ -349,7 +376,7 @@ npx wrangler d1 execute our-little-days-db --remote --file=./migrations/0003_pro
 - 所有请求走 HTTPS。
 - 拿到完整网址的人拥有读写权限，所以不要把网址发到公开群组、截图或公开仓库。
 - 浏览器历史、手机主屏幕图标、聊天记录里都会留下完整网址，这是无账号方案的取舍。
-- 最稳妥的备份方式就是定期点一次「导出全部记录」，把 CSV 收藏好。
+- 最稳妥的备份方式就是定期点一次「导出全部记录」，把 CSV 收藏好；见面日和小纸条可以用下面的「导出见面日」单独备份。
 
 ---
 

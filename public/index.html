@@ -30,6 +30,11 @@
       --mist-soft: #EAF4F8;
       --mist-line: #CFE3EB;
       --mist-deep: #6F97A8;
+      --gold-cream: #FFF8DF;
+      --gold-soft: #F1DCA6;
+      --gold: #E4C783;
+      --gold-deep: #C9A45B;
+      --gold-ink: #5D4726;
       --line: #F1E4DD;
       --text: #5A4F4C;
       --muted: #9B8A83;
@@ -300,6 +305,211 @@
 
     .both-dot.zhuzhu {
       background: var(--mist);
+    }
+
+    .both-done.is-meetup {
+      border-color: #E9D5A6;
+      background: #FFF9E9;
+      color: #8A6A35;
+    }
+
+    .meetup-block {
+      margin-top: 10px;
+    }
+
+    .meetup-toggle {
+      display: flex;
+      width: 100%;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid #E8D3A3;
+      border-radius: 14px;
+      background: #FFFBF1;
+      color: #8A6A35;
+      font-size: 11.5px;
+      font-weight: 650;
+      transition: background .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .meetup-toggle:hover {
+      background: #FFF6E2;
+    }
+
+    .meetup-toggle:active {
+      transform: scale(.99);
+    }
+
+    .meetup-toggle:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .meetup-toggle-star {
+      color: var(--gold-deep);
+      font-size: 12px;
+    }
+
+    .meetup-panel {
+      padding: 13px 13px 12px;
+      border: 1px solid #E8D3A3;
+      border-radius: 16px;
+      background: #FFF9EA;
+      animation: page-fade .3s var(--ease) both;
+    }
+
+    .meetup-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .meetup-eyebrow {
+      margin: 0;
+      color: #8A6A35;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .meetup-eyebrow span {
+      color: var(--gold-deep);
+    }
+
+    .meetup-panel-copy {
+      margin: 3px 0 0;
+      color: #AD9364;
+      font-size: 9.5px;
+      line-height: 1.5;
+    }
+
+    .meetup-cancel {
+      flex: none;
+      padding: 3px 0;
+      color: #B09A84;
+      font-size: 9.5px;
+    }
+
+    .meetup-note-form {
+      margin-top: 11px;
+    }
+
+    .meetup-note-label {
+      display: block;
+      color: #8C7452;
+      font-size: 9.5px;
+      font-weight: 650;
+    }
+
+    .meetup-note-label span {
+      color: #BAA988;
+      font-weight: 400;
+    }
+
+    .meetup-note-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 7px;
+      margin-top: 6px;
+    }
+
+    .meetup-note-input {
+      width: 100%;
+      min-height: 36px;
+      padding: 0 10px;
+      border: 1px solid #EAD9B9;
+      border-radius: 11px;
+      background: #FFFDF8;
+      color: var(--text);
+      font-size: 11.5px;
+      outline: none;
+    }
+
+    .meetup-note-input::placeholder {
+      color: #C0B094;
+    }
+
+    .meetup-note-input:focus {
+      border-color: var(--gold-deep);
+      box-shadow: 0 0 0 3px rgba(232, 211, 163, .22);
+    }
+
+    .meetup-note-save {
+      min-height: 36px;
+      padding: 0 13px;
+      border-radius: 11px;
+      background: var(--gold);
+      color: var(--gold-ink);
+      font-size: 11px;
+      font-weight: 700;
+      transition: background .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .meetup-note-save:hover {
+      background: #EBD394;
+    }
+
+    .meetup-note-save:active {
+      transform: scale(.97);
+    }
+
+    .meetup-note-save:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .meetup-other-note {
+      margin: 9px 0 0;
+      padding-top: 8px;
+      border-top: 1px dashed #EBD9B8;
+      color: #8C7452;
+      font-size: 10px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .meetup-cancel-confirm {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #EBD9B8;
+      border-radius: 12px;
+      background: #FFF5E3;
+    }
+
+    .meetup-cancel-confirm p {
+      margin: 0;
+      color: #8C7452;
+      font-size: 9.5px;
+      line-height: 1.6;
+    }
+
+    .meetup-cancel-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .meetup-cancel-keep,
+    .meetup-cancel-confirm-btn {
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 9px;
+      font-size: 10px;
+      font-weight: 650;
+    }
+
+    .meetup-cancel-keep {
+      border: 1px solid #EAD9B9;
+      background: #FFFDF8;
+      color: #8C7452;
+    }
+
+    .meetup-cancel-confirm-btn {
+      background: #DFC183;
+      color: #5D4726;
     }
 
     .soft-badge,
@@ -1266,6 +1476,23 @@
       background: #9CC1D0;
     }
 
+    .legend-meetup {
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      box-shadow: inset 0 0 0 1px var(--gold-deep);
+    }
+
+    .meetup-legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 7px;
+      color: #B29A72;
+      font-size: 9.5px;
+    }
+
     .cycle-summary {
       margin-top: 14px;
       padding: 13px 14px;
@@ -1628,6 +1855,16 @@
       line-height: 1.6;
     }
 
+    .export-meetups-link {
+      display: inline-block;
+      margin-top: 9px;
+      color: #A8854C;
+      font-size: 10px;
+      text-decoration: underline;
+      text-decoration-color: #DFC99B;
+      text-underline-offset: 3px;
+    }
+
     .page-footer {
       padding: 10px 0 0;
       color: #BFAEA7;
@@ -1826,6 +2063,86 @@
       outline-color: #7FA6B6;
     }
 
+    .day-btn.is-meetup {
+      isolation: isolate;
+      overflow: hidden;
+      border-color: var(--gold-deep);
+      background:
+        radial-gradient(circle at 32% 24%, rgba(255, 252, 235, .96) 0 12%, rgba(255, 250, 227, 0) 43%),
+        linear-gradient(145deg, #F6E3B2 0%, #E8CE92 58%, #DDBB74 100%);
+      color: var(--gold-ink);
+      font-weight: 680;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 251, 235, .68),
+        0 3px 9px rgba(201, 164, 91, .20);
+    }
+
+    .day-btn.is-meetup::before {
+      position: absolute;
+      z-index: -1;
+      inset: -35% -85%;
+      background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, .62) 50%, transparent 64%);
+      content: "";
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-140%) rotate(8deg);
+      animation: meetup-sheen 7.6s ease-in-out infinite;
+    }
+
+    .day-btn.is-meetup::after {
+      position: absolute;
+      top: 1px;
+      right: 3px;
+      color: #76552A;
+      content: "✦";
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 1px 0 rgba(255, 249, 229, .7);
+      pointer-events: none;
+      animation: meetup-sparkle 4.8s ease-in-out infinite;
+    }
+
+    .calendar-grid .day-btn.is-meetup:hover:not(:disabled) {
+      background:
+        radial-gradient(circle at 32% 24%, rgba(255, 252, 235, .96) 0 12%, rgba(255, 250, 227, 0) 43%),
+        linear-gradient(145deg, #F8E7BA 0%, #EBD395 58%, #E0C078 100%);
+      filter: brightness(1.015);
+    }
+
+    .calendar-grid .day-btn.is-meetup.is-today {
+      outline-color: #B58E4A;
+      outline-offset: 2px;
+    }
+
+    @keyframes meetup-sheen {
+      0%, 72%, 100% {
+        opacity: 0;
+        transform: translateX(-140%) rotate(8deg);
+      }
+      78% {
+        opacity: .35;
+      }
+      88% {
+        opacity: .12;
+        transform: translateX(140%) rotate(8deg);
+      }
+      94% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes meetup-sparkle {
+      0%, 100% {
+        opacity: .55;
+        transform: scale(.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+    }
+
     .page.is-zhuzhu .habit-mini.is-done {
       background: var(--mist-soft);
       color: #547382;
@@ -1966,7 +2283,7 @@
         </div>
         <div class="both-done" id="bothDone" hidden aria-live="polite">
           <span class="both-done-mark" aria-hidden="true"><span class="both-dot panpan"></span><span class="both-dot zhuzhu"></span></span>
-          <span>今天两个人都打卡啦，真棒。</span>
+          <span id="bothDoneText">今天两个人都打卡啦，真棒。</span>
         </div>
         <div class="section-head">
           <div>
@@ -1991,6 +2308,37 @@
           <button class="icon-button" id="nextDayBtn" type="button" aria-label="后一天">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
+        </div>
+
+        <div class="meetup-block" id="meetupBlock">
+          <button class="meetup-toggle" id="meetupToggle" type="button" disabled>
+            <span class="meetup-toggle-star" aria-hidden="true">✦</span>
+            <span id="meetupToggleText">今天在一起</span>
+          </button>
+          <div class="meetup-panel" id="meetupPanel" hidden>
+            <div class="meetup-panel-head">
+              <div>
+                <p class="meetup-eyebrow"><span aria-hidden="true">✦</span> 见面日</p>
+                <p class="meetup-panel-copy">两边的日历都变成金色了</p>
+              </div>
+              <button class="meetup-cancel" id="meetupCancel" type="button">取消</button>
+            </div>
+            <div class="meetup-note-form">
+              <label class="meetup-note-label" for="meetupNoteInput">我的小纸条 <span>可不写</span></label>
+              <div class="meetup-note-row">
+                <input class="meetup-note-input" id="meetupNoteInput" type="text" maxlength="60" placeholder="给今天留一句…" autocomplete="off">
+                <button class="meetup-note-save" id="meetupNoteSave" type="button">保存</button>
+              </div>
+            </div>
+            <p class="meetup-other-note" id="meetupOtherNote" hidden></p>
+            <div class="meetup-cancel-confirm" id="meetupCancelConfirm" hidden>
+              <p>取消后，两边日历会一起熄灭，小纸条也会一起删掉。</p>
+              <div class="meetup-cancel-actions">
+                <button class="meetup-cancel-keep" id="meetupCancelKeep" type="button">先留着</button>
+                <button class="meetup-cancel-confirm-btn" id="meetupCancelConfirmBtn" type="button">确定取消</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <form id="entryForm" novalidate>
@@ -2180,6 +2528,10 @@
           <span class="legend-item"><span class="legend-dot legend-training-cut"></span>减脂</span>
           <span class="legend-item"><span class="legend-dot legend-training-both"></span>两个都练</span>
         </div>
+        <div class="meetup-legend" aria-label="见面日图例">
+          <span class="legend-dot legend-meetup" aria-hidden="true"></span>
+          <span>见面日</span>
+        </div>
         <div class="cycle-summary profile-panpan-only">
           <div class="cycle-grid">
             <div>
@@ -2229,6 +2581,7 @@
           导出全部记录
         </a>
         <p class="export-note">只属于我们两个人的小本子，没有别的地方会看到。</p>
+        <a class="export-meetups-link" id="exportMeetupsBtn" href="#" download>另外导出一份见面日小纸条</a>
       </section>
     </main>
 
@@ -2325,6 +2678,7 @@
 
     const state = {
       records: new Map(),
+      meetups: new Map(),
       profile: readStoredProfile(),
       selectedDate: todayKey,
       selectedChartDate: null,
@@ -2334,6 +2688,7 @@
       loading: true,
       loadFailed: false,
       saving: false,
+      meetupBusy: false,
       form: {
         period: 'none',
         symptoms: new Set(),
@@ -2353,6 +2708,18 @@
       heroDumbbell: document.getElementById('heroDumbbell'),
       profileTabs: Array.from(document.querySelectorAll('.profile-tab')),
       bothDone: document.getElementById('bothDone'),
+      bothDoneText: document.getElementById('bothDoneText'),
+      meetupBlock: document.getElementById('meetupBlock'),
+      meetupToggle: document.getElementById('meetupToggle'),
+      meetupToggleText: document.getElementById('meetupToggleText'),
+      meetupPanel: document.getElementById('meetupPanel'),
+      meetupCancel: document.getElementById('meetupCancel'),
+      meetupCancelConfirm: document.getElementById('meetupCancelConfirm'),
+      meetupCancelKeep: document.getElementById('meetupCancelKeep'),
+      meetupCancelConfirmBtn: document.getElementById('meetupCancelConfirmBtn'),
+      meetupNoteInput: document.getElementById('meetupNoteInput'),
+      meetupNoteSave: document.getElementById('meetupNoteSave'),
+      meetupOtherNote: document.getElementById('meetupOtherNote'),
       form: document.getElementById('entryForm'),
       formEyebrow: document.getElementById('formEyebrow'),
       formTitle: document.getElementById('formTitle'),
@@ -2397,6 +2764,7 @@
       loadError: document.getElementById('loadError'),
       retryBtn: document.getElementById('retryBtn'),
       exportBtn: document.getElementById('exportBtn'),
+      exportMeetupsBtn: document.getElementById('exportMeetupsBtn'),
       toast: document.getElementById('toast'),
       recordTemplate: document.getElementById('recordTemplate'),
     };
@@ -2454,6 +2822,10 @@
 
     function getRecord(dateKey, owner = state.profile) {
       return state.records.get(recordKey(owner, dateKey)) || null;
+    }
+
+    function getMeetup(dateKey) {
+      return state.meetups.get(dateKey) || null;
     }
 
     function recordsFor(owner) {
@@ -2593,13 +2965,124 @@
       renderCycles();
       renderRecords();
       renderBothDone();
+      renderMeetupUI();
     }
 
     function renderBothDone() {
       const bothDone = state.loaded
         && Boolean(getRecord(todayKey, 'panpan'))
         && Boolean(getRecord(todayKey, 'zhuzhu'));
+      const meetupToday = Boolean(getMeetup(todayKey));
       els.bothDone.hidden = !bothDone;
+      els.bothDone.classList.toggle('is-meetup', bothDone && meetupToday);
+      els.bothDoneText.textContent = bothDone && meetupToday
+        ? '今天见面，两个人都打卡啦。'
+        : '今天两个人都打卡啦，真棒。';
+    }
+
+    function renderMeetupUI() {
+      const meetup = getMeetup(state.selectedDate);
+      const isToday = state.selectedDate === todayKey;
+      els.meetupCancelConfirm.hidden = true;
+      els.meetupToggle.hidden = Boolean(meetup);
+      els.meetupToggle.disabled = state.meetupBusy || !state.loaded;
+      els.meetupToggleText.textContent = isToday ? '今天在一起' : '这一天在一起';
+      els.meetupPanel.hidden = !meetup;
+
+      if (!meetup) {
+        els.meetupOtherNote.hidden = true;
+        if (document.activeElement !== els.meetupNoteInput) {
+          els.meetupNoteInput.value = '';
+        }
+        els.meetupNoteInput.disabled = false;
+        els.meetupNoteSave.disabled = false;
+        els.meetupCancel.disabled = false;
+        return;
+      }
+
+      const currentNote = meetup.notes[state.profile] || '';
+      if (document.activeElement !== els.meetupNoteInput) {
+        els.meetupNoteInput.value = currentNote;
+      }
+      const otherOwner = state.profile === 'panpan' ? 'zhuzhu' : 'panpan';
+      const otherNote = meetup.notes[otherOwner] || '';
+      if (otherNote) {
+        els.meetupOtherNote.textContent = `${PROFILE_LABELS[otherOwner]}的小纸条：${otherNote}`;
+        els.meetupOtherNote.hidden = false;
+      } else {
+        els.meetupOtherNote.hidden = true;
+      }
+      els.meetupNoteInput.disabled = state.meetupBusy;
+      els.meetupNoteSave.disabled = state.meetupBusy;
+      els.meetupCancel.disabled = state.meetupBusy;
+    }
+
+    async function mutateMeetup(action, extra = {}) {
+      if (state.meetupBusy) return null;
+      const date = state.selectedDate;
+      state.meetupBusy = true;
+      renderMeetupUI();
+      try {
+        const response = await fetch(`${API_BASE}/meetups`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ date, action, ...extra }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || '见面日暂时没有记上，请稍后再试一次。');
+
+        if (result.meetup) {
+          state.meetups.set(result.meetup.date, result.meetup);
+        } else {
+          state.meetups.delete(date);
+        }
+        renderCalendar();
+        renderBothDone();
+        return result;
+      } catch (error) {
+        showToast(error.message || '见面日暂时没有记上，请稍后再试一次。');
+        return null;
+      } finally {
+        state.meetupBusy = false;
+        renderMeetupUI();
+      }
+    }
+
+    async function markMeetup() {
+      const result = await mutateMeetup('mark');
+      if (result?.meetup) {
+        showToast('见面日点亮啦，两边日历都变成金色了。');
+      }
+    }
+
+    function requestMeetupCancel() {
+      const meetup = getMeetup(state.selectedDate);
+      if (!meetup) return;
+      const hasNotes = Object.values(meetup.notes).some(Boolean);
+      if (hasNotes) {
+        els.meetupCancelConfirm.hidden = false;
+        return;
+      }
+      unmarkMeetup();
+    }
+
+    async function unmarkMeetup() {
+      const meetup = getMeetup(state.selectedDate);
+      if (!meetup) return;
+      const result = await mutateMeetup('unmark');
+      if (result && !result.meetup) {
+        showToast('这一天的见面日取消啦。');
+      }
+    }
+
+    async function saveMeetupNote() {
+      const meetup = getMeetup(state.selectedDate);
+      if (!meetup) return;
+      const note = els.meetupNoteInput.value.trim();
+      const result = await mutateMeetup('note', { owner: state.profile, note });
+      if (result?.meetup) {
+        showToast(note ? '这句小纸条已经放好啦。' : '这句小纸条已经清空啦。');
+      }
     }
 
     function renderChart() {
@@ -2804,8 +3287,12 @@
         button.dataset.date = key;
         button.textContent = String(dayNumber);
         const record = getRecord(key);
+        const meetup = getMeetup(key);
         let statusLabel = '';
-        if (zhuzhu) {
+        if (meetup) {
+          button.classList.add('is-meetup');
+          statusLabel = '见面日';
+        } else if (zhuzhu) {
           const muscleDone = record?.muscle === 1 || record?.muscle === true;
           const cutDone = record?.cut === 1 || record?.cut === true;
           if (muscleDone && cutDone) {
@@ -3043,6 +3530,7 @@
       setFormFromRecord(getRecord(dateKey));
       updateDateView();
       renderCalendar();
+      renderMeetupUI();
       if (options.scroll) {
         document.getElementById('checkin').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -3161,6 +3649,19 @@
           const owner = record.owner === 'zhuzhu' ? 'zhuzhu' : 'panpan';
           return [recordKey(owner, record.date), { ...record, owner }];
         }));
+        const meetups = Array.isArray(result.meetups) ? result.meetups : [];
+        state.meetups = new Map(meetups
+          .filter((meetup) => meetup && typeof meetup.date === 'string')
+          .map((meetup) => [
+            meetup.date,
+            {
+              date: meetup.date,
+              notes: {
+                panpan: typeof meetup.notes?.panpan === 'string' ? meetup.notes.panpan : '',
+                zhuzhu: typeof meetup.notes?.zhuzhu === 'string' ? meetup.notes.zhuzhu : '',
+              },
+            },
+          ]));
         state.loaded = true;
         state.loading = false;
         state.loadFailed = false;
@@ -3309,6 +3810,19 @@
       selectDate(button.dataset.date, { scroll: true });
     });
 
+    els.meetupToggle.addEventListener('click', markMeetup);
+    els.meetupCancel.addEventListener('click', requestMeetupCancel);
+    els.meetupCancelKeep.addEventListener('click', () => {
+      els.meetupCancelConfirm.hidden = true;
+    });
+    els.meetupCancelConfirmBtn.addEventListener('click', unmarkMeetup);
+    els.meetupNoteSave.addEventListener('click', saveMeetupNote);
+    els.meetupNoteInput.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      saveMeetupNote();
+    });
+
     els.retryBtn.addEventListener('click', loadRecords);
     els.form.addEventListener('submit', saveEntry);
     els.exportBtn.addEventListener('click', (event) => {
@@ -3330,6 +3844,7 @@
     }
 
     els.exportBtn.href = `${API_BASE}/export`;
+    els.exportMeetupsBtn.href = `${API_BASE}/export-meetups`;
     els.datePicker.max = todayKey;
     els.datePicker.min = '2000-01-01';
     els.datePicker.value = todayKey;
