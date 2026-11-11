@@ -30,11 +30,15 @@
       --mist-soft: #EAF4F8;
       --mist-line: #CFE3EB;
       --mist-deep: #6F97A8;
-      --gold-cream: #FFF8DF;
-      --gold-soft: #F1DCA6;
-      --gold: #E4C783;
-      --gold-deep: #C9A45B;
-      --gold-ink: #5D4726;
+      --dream-rose: #F5CDE8;
+      --dream-lilac: #E0C1F1;
+      --dream-peri: #C8B4EE;
+      --dream-line: #E4D2EE;
+      --dream: #D9BEEA;
+      --dream-deep: #9B73B4;
+      --dream-ink: #563A63;
+      --dream-wash: #FDF7FF;
+      --dream-panel: #FBF3FD;
       --line: #F1E4DD;
       --text: #5A4F4C;
       --muted: #9B8A83;
@@ -308,9 +312,9 @@
     }
 
     .both-done.is-meetup {
-      border-color: #E9D5A6;
-      background: #FFF9E9;
-      color: #8A6A35;
+      border-color: var(--dream-line);
+      background: var(--dream-panel);
+      color: #7A5885;
     }
 
     .meetup-block {
@@ -324,17 +328,17 @@
       align-items: center;
       justify-content: center;
       gap: 7px;
-      border: 1px solid #E8D3A3;
+      border: 1px solid var(--dream-line);
       border-radius: 14px;
-      background: #FFFBF1;
-      color: #8A6A35;
+      background: var(--dream-wash);
+      color: #7A5885;
       font-size: 11.5px;
       font-weight: 650;
       transition: background .2s var(--ease), transform .2s var(--ease);
     }
 
     .meetup-toggle:hover {
-      background: #FFF6E2;
+      background: #FBF0FE;
     }
 
     .meetup-toggle:active {
@@ -347,15 +351,15 @@
     }
 
     .meetup-toggle-star {
-      color: var(--gold-deep);
+      color: var(--dream-deep);
       font-size: 12px;
     }
 
     .meetup-panel {
       padding: 13px 13px 12px;
-      border: 1px solid #E8D3A3;
+      border: 1px solid var(--dream-line);
       border-radius: 16px;
-      background: #FFF9EA;
+      background: var(--dream-panel);
       animation: page-fade .3s var(--ease) both;
     }
 
@@ -368,19 +372,19 @@
 
     .meetup-eyebrow {
       margin: 0;
-      color: #8A6A35;
+      color: #75517F;
       font-size: 11.5px;
       font-weight: 700;
       letter-spacing: .02em;
     }
 
     .meetup-eyebrow span {
-      color: var(--gold-deep);
+      color: var(--dream-deep);
     }
 
     .meetup-panel-copy {
       margin: 3px 0 0;
-      color: #AD9364;
+      color: #A88AB4;
       font-size: 9.5px;
       line-height: 1.5;
     }
@@ -388,7 +392,7 @@
     .meetup-cancel {
       flex: none;
       padding: 3px 0;
-      color: #B09A84;
+      color: #B39BBC;
       font-size: 9.5px;
     }
 
@@ -398,13 +402,13 @@
 
     .meetup-note-label {
       display: block;
-      color: #8C7452;
+      color: #7E5C89;
       font-size: 9.5px;
       font-weight: 650;
     }
 
     .meetup-note-label span {
-      color: #BAA988;
+      color: #BCA7C4;
       font-weight: 400;
     }
 
@@ -419,36 +423,36 @@
       width: 100%;
       min-height: 36px;
       padding: 0 10px;
-      border: 1px solid #EAD9B9;
+      border: 1px solid #E8D8F0;
       border-radius: 11px;
-      background: #FFFDF8;
+      background: #FFFDFF;
       color: var(--text);
       font-size: 11.5px;
       outline: none;
     }
 
     .meetup-note-input::placeholder {
-      color: #C0B094;
+      color: #C4AFCC;
     }
 
     .meetup-note-input:focus {
-      border-color: var(--gold-deep);
-      box-shadow: 0 0 0 3px rgba(232, 211, 163, .22);
+      border-color: #B48BCA;
+      box-shadow: 0 0 0 3px rgba(216, 190, 232, .28);
     }
 
     .meetup-note-save {
       min-height: 36px;
       padding: 0 13px;
       border-radius: 11px;
-      background: var(--gold);
-      color: var(--gold-ink);
+      background: var(--dream);
+      color: var(--dream-ink);
       font-size: 11px;
       font-weight: 700;
       transition: background .2s var(--ease), transform .2s var(--ease);
     }
 
     .meetup-note-save:hover {
-      background: #EBD394;
+      background: #E5CDEF;
     }
 
     .meetup-note-save:active {
@@ -463,8 +467,8 @@
     .meetup-other-note {
       margin: 9px 0 0;
       padding-top: 8px;
-      border-top: 1px dashed #EBD9B8;
-      color: #8C7452;
+      border-top: 1px dashed #EADBF1;
+      color: #7E5C89;
       font-size: 10px;
       line-height: 1.6;
       overflow-wrap: anywhere;
@@ -473,14 +477,14 @@
     .meetup-cancel-confirm {
       margin-top: 10px;
       padding: 10px;
-      border: 1px solid #EBD9B8;
+      border: 1px solid #E7D6EF;
       border-radius: 12px;
-      background: #FFF5E3;
+      background: #FBF1FD;
     }
 
     .meetup-cancel-confirm p {
       margin: 0;
-      color: #8C7452;
+      color: #7E5C89;
       font-size: 9.5px;
       line-height: 1.6;
     }
@@ -502,14 +506,14 @@
     }
 
     .meetup-cancel-keep {
-      border: 1px solid #EAD9B9;
-      background: #FFFDF8;
-      color: #8C7452;
+      border: 1px solid #E7D6EF;
+      background: #FFFDFF;
+      color: #7E5C89;
     }
 
     .meetup-cancel-confirm-btn {
-      background: #DFC183;
-      color: #5D4726;
+      background: var(--dream);
+      color: var(--dream-ink);
     }
 
     .soft-badge,
@@ -1479,8 +1483,8 @@
     .legend-meetup {
       width: 10px;
       height: 10px;
-      background: var(--gold);
-      box-shadow: inset 0 0 0 1px var(--gold-deep);
+      background: linear-gradient(145deg, var(--dream-rose), var(--dream-peri));
+      box-shadow: inset 0 0 0 1px var(--dream-deep);
     }
 
     .meetup-legend {
@@ -1489,7 +1493,7 @@
       justify-content: center;
       gap: 5px;
       margin-top: 7px;
-      color: #B29A72;
+      color: #A989B7;
       font-size: 9.5px;
     }
 
@@ -1858,10 +1862,10 @@
     .export-meetups-link {
       display: inline-block;
       margin-top: 9px;
-      color: #A8854C;
+      color: #9676A6;
       font-size: 10px;
       text-decoration: underline;
-      text-decoration-color: #DFC99B;
+      text-decoration-color: #DCC7E7;
       text-underline-offset: 3px;
     }
 
@@ -2066,22 +2070,22 @@
     .day-btn.is-meetup {
       isolation: isolate;
       overflow: hidden;
-      border-color: var(--gold-deep);
+      border-color: #CBB0E2;
       background:
-        radial-gradient(circle at 32% 24%, rgba(255, 252, 235, .96) 0 12%, rgba(255, 250, 227, 0) 43%),
-        linear-gradient(145deg, #F6E3B2 0%, #E8CE92 58%, #DDBB74 100%);
-      color: var(--gold-ink);
+        radial-gradient(circle at 30% 21%, rgba(255, 255, 255, .9) 0 6%, rgba(255, 255, 255, 0) 34%),
+        linear-gradient(145deg, var(--dream-rose) 0%, var(--dream-lilac) 48%, var(--dream-peri) 100%);
+      color: var(--dream-ink);
       font-weight: 680;
       box-shadow:
-        inset 0 0 0 1px rgba(255, 251, 235, .68),
-        0 3px 9px rgba(201, 164, 91, .20);
+        inset 0 0 0 1px rgba(255, 255, 255, .72),
+        0 3px 11px rgba(185, 147, 208, .22);
     }
 
     .day-btn.is-meetup::before {
       position: absolute;
       z-index: -1;
       inset: -35% -85%;
-      background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, .62) 50%, transparent 64%);
+      background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, .72) 50%, transparent 64%);
       content: "";
       opacity: 0;
       pointer-events: none;
@@ -2093,25 +2097,27 @@
       position: absolute;
       top: 1px;
       right: 3px;
-      color: #76552A;
+      color: #FFF9FF;
       content: "✦";
       font-size: 10px;
       font-weight: 700;
       line-height: 1;
-      text-shadow: 0 1px 0 rgba(255, 249, 229, .7);
+      text-shadow:
+        0 0 2px rgba(125, 83, 150, .9),
+        0 0 7px rgba(160, 112, 186, .75);
       pointer-events: none;
       animation: meetup-sparkle 4.8s ease-in-out infinite;
     }
 
     .calendar-grid .day-btn.is-meetup:hover:not(:disabled) {
       background:
-        radial-gradient(circle at 32% 24%, rgba(255, 252, 235, .96) 0 12%, rgba(255, 250, 227, 0) 43%),
-        linear-gradient(145deg, #F8E7BA 0%, #EBD395 58%, #E0C078 100%);
+        radial-gradient(circle at 30% 21%, rgba(255, 255, 255, .92) 0 6%, rgba(255, 255, 255, 0) 34%),
+        linear-gradient(145deg, #F7D6EC 0%, #E5CAF4 48%, #D0BEF3 100%);
       filter: brightness(1.015);
     }
 
     .calendar-grid .day-btn.is-meetup.is-today {
-      outline-color: #B58E4A;
+      outline-color: #A983C4;
       outline-offset: 2px;
     }
 
@@ -2319,7 +2325,7 @@
             <div class="meetup-panel-head">
               <div>
                 <p class="meetup-eyebrow"><span aria-hidden="true">✦</span> 见面日</p>
-                <p class="meetup-panel-copy">两边的日历都变成金色了</p>
+                <p class="meetup-panel-copy">两边的日历都亮起粉紫色了</p>
               </div>
               <button class="meetup-cancel" id="meetupCancel" type="button">取消</button>
             </div>
@@ -3051,7 +3057,7 @@
     async function markMeetup() {
       const result = await mutateMeetup('mark');
       if (result?.meetup) {
-        showToast('见面日点亮啦，两边日历都变成金色了。');
+        showToast('见面日点亮啦，两边日历都亮起粉紫色了。');
       }
     }
 
