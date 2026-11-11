@@ -1483,8 +1483,7 @@
     .legend-meetup {
       width: 10px;
       height: 10px;
-      background: linear-gradient(145deg, var(--dream-rose), var(--dream-peri));
-      box-shadow: inset 0 0 0 1px var(--dream-deep);
+      background: linear-gradient(160deg, #F6D9E7 0%, #DCD1F1 50%, #BFD7EE 100%);
     }
 
     .meetup-legend {
@@ -2068,84 +2067,116 @@
     }
 
     .day-btn.is-meetup {
-      isolation: isolate;
       overflow: hidden;
-      border-color: #CBB0E2;
+      border: 0;
       background:
-        radial-gradient(circle at 30% 21%, rgba(255, 255, 255, .9) 0 6%, rgba(255, 255, 255, 0) 34%),
-        linear-gradient(145deg, var(--dream-rose) 0%, var(--dream-lilac) 48%, var(--dream-peri) 100%);
+        radial-gradient(circle at 16% 22%, rgba(255, 255, 255, .95) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 72% 32%, rgba(255, 249, 230, .95) 0 .9px, transparent 1.4px),
+        radial-gradient(circle at 38% 68%, rgba(255, 255, 255, .86) 0 .8px, transparent 1.4px),
+        radial-gradient(circle at 84% 72%, rgba(255, 244, 210, .9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 50% 8%, rgba(255, 252, 236, .9) 0 10%, transparent 36%),
+        radial-gradient(ellipse at 22% 24%, rgba(255, 216, 226, .74) 0 16%, transparent 48%),
+        radial-gradient(ellipse at 76% 64%, rgba(165, 201, 233, .55) 0 20%, transparent 56%),
+        linear-gradient(180deg, #FBE5E9 0%, #F0D8EA 28%, #D9D3F0 52%, #BDD7EE 74%, #9FC2E0 100%);
       color: var(--dream-ink);
       font-weight: 680;
-      box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, .72),
-        0 3px 11px rgba(185, 147, 208, .22);
+      box-shadow: none;
     }
 
-    .day-btn.is-meetup::before {
+    .day-btn.is-meetup .day-number {
+      position: relative;
+      z-index: 2;
+      line-height: 1;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, .45);
+    }
+
+    .meetup-tassels {
       position: absolute;
-      z-index: -1;
-      inset: -35% -85%;
-      background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, .72) 50%, transparent 64%);
-      content: "";
-      opacity: 0;
+      z-index: 1;
+      inset: 0;
+      overflow: hidden;
+      border-radius: 50%;
       pointer-events: none;
-      transform: translateX(-140%) rotate(8deg);
-      animation: meetup-sheen 7.6s ease-in-out infinite;
     }
 
-    .day-btn.is-meetup::after {
+    .meetup-tassels i {
       position: absolute;
-      top: 1px;
-      right: 3px;
+      top: -10px;
+      width: 1px;
+      height: 13px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, .92));
+      filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, .85));
+      opacity: 0;
+      animation: meetup-star-fall 4.6s linear infinite;
+    }
+
+    .meetup-tassels i::after {
+      position: absolute;
+      bottom: -3px;
+      left: -2.5px;
       color: #FFF9FF;
       content: "✦";
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 5px;
       line-height: 1;
       text-shadow:
-        0 0 2px rgba(125, 83, 150, .9),
-        0 0 7px rgba(160, 112, 186, .75);
-      pointer-events: none;
-      animation: meetup-sparkle 4.8s ease-in-out infinite;
+        0 0 2px rgba(120, 80, 146, .68),
+        0 0 5px rgba(255, 255, 255, .9);
+    }
+
+    .meetup-tassels i:nth-child(1) {
+      left: 17%;
+      animation-delay: -.2s;
+    }
+
+    .meetup-tassels i:nth-child(2) {
+      left: 40%;
+      height: 10px;
+      animation-delay: -1.4s;
+    }
+
+    .meetup-tassels i:nth-child(3) {
+      left: 62%;
+      animation-delay: -2.5s;
+    }
+
+    .meetup-tassels i:nth-child(4) {
+      left: 82%;
+      height: 11px;
+      animation-delay: -3.5s;
     }
 
     .calendar-grid .day-btn.is-meetup:hover:not(:disabled) {
       background:
-        radial-gradient(circle at 30% 21%, rgba(255, 255, 255, .92) 0 6%, rgba(255, 255, 255, 0) 34%),
-        linear-gradient(145deg, #F7D6EC 0%, #E5CAF4 48%, #D0BEF3 100%);
-      filter: brightness(1.015);
+        radial-gradient(circle at 16% 22%, rgba(255, 255, 255, .95) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 72% 32%, rgba(255, 249, 230, .95) 0 .9px, transparent 1.4px),
+        radial-gradient(circle at 38% 68%, rgba(255, 255, 255, .86) 0 .8px, transparent 1.4px),
+        radial-gradient(circle at 84% 72%, rgba(255, 244, 210, .9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 50% 8%, rgba(255, 252, 236, .9) 0 10%, transparent 36%),
+        radial-gradient(ellipse at 22% 24%, rgba(255, 216, 226, .74) 0 16%, transparent 48%),
+        radial-gradient(ellipse at 76% 64%, rgba(165, 201, 233, .55) 0 20%, transparent 56%),
+        linear-gradient(180deg, #FBE5E9 0%, #F0D8EA 28%, #D9D3F0 52%, #BDD7EE 74%, #9FC2E0 100%);
+      filter: brightness(1.02);
     }
 
     .calendar-grid .day-btn.is-meetup.is-today {
-      outline-color: #A983C4;
-      outline-offset: 2px;
+      outline: none;
+      outline-offset: 0;
     }
 
-    @keyframes meetup-sheen {
-      0%, 72%, 100% {
+    @keyframes meetup-star-fall {
+      0% {
         opacity: 0;
-        transform: translateX(-140%) rotate(8deg);
+        transform: translateY(-6px);
       }
-      78% {
-        opacity: .35;
+      14% {
+        opacity: .95;
       }
-      88% {
-        opacity: .12;
-        transform: translateX(140%) rotate(8deg);
+      72% {
+        opacity: .68;
       }
-      94% {
+      100% {
         opacity: 0;
-      }
-    }
-
-    @keyframes meetup-sparkle {
-      0%, 100% {
-        opacity: .55;
-        transform: scale(.9);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.08);
+        transform: translateY(34px);
       }
     }
 
@@ -2325,7 +2356,7 @@
             <div class="meetup-panel-head">
               <div>
                 <p class="meetup-eyebrow"><span aria-hidden="true">✦</span> 见面日</p>
-                <p class="meetup-panel-copy">两边的日历都亮起粉紫色了</p>
+                <p class="meetup-panel-copy">两边的日历都落满星光了</p>
               </div>
               <button class="meetup-cancel" id="meetupCancel" type="button">取消</button>
             </div>
@@ -3057,7 +3088,7 @@
     async function markMeetup() {
       const result = await mutateMeetup('mark');
       if (result?.meetup) {
-        showToast('见面日点亮啦，两边日历都亮起粉紫色了。');
+        showToast('见面日点亮啦，两边日历都落满星光了。');
       }
     }
 
@@ -3298,6 +3329,17 @@
         if (meetup) {
           button.classList.add('is-meetup');
           statusLabel = '见面日';
+          button.textContent = '';
+          const number = document.createElement('span');
+          number.className = 'day-number';
+          number.textContent = String(dayNumber);
+          const tassels = document.createElement('span');
+          tassels.className = 'meetup-tassels';
+          tassels.setAttribute('aria-hidden', 'true');
+          for (let index = 0; index < 4; index += 1) {
+            tassels.appendChild(document.createElement('i'));
+          }
+          button.append(number, tassels);
         } else if (zhuzhu) {
           const muscleDone = record?.muscle === 1 || record?.muscle === true;
           const cutDone = record?.cut === 1 || record?.cut === true;
